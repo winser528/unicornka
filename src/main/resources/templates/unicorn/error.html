@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='Error Page!!')">
+<div th:fragment="contents" class="page-wrapper">
+    <!-- main start -->
+    <section class="main-container">
+        <div class="container">
+            <div class="good-card">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-12">
+                        <div class="card m-3 border-0">
+                            <div class="card-body p-4">
+                                <h3 class="card-title ali-icon">&#xe651; <span th:text="${error}">错误消息</span>：</h3>
+                                <h6><small class="text-muted">似乎遇到了一点问题~</small></h6>
+                                <div class="err-message p-3">
+                                    <p th:text="'Message: ' + ${message}"/>
+                                    <p th:text="'Status: ' + ${status}"/>
+                                    <p th:text="'Timestamp: ' + ${timestamp}"/>
+                                    <p th:text="'Path: ' + ${path}"/>
+                                </div>
+                                <div class="col-12 mt-3 text-center">
+                                    <a th:href="${uri}?:'javascript:history.back(-1);'" class="btn btn-outline-dark">返回页面</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- main end -->
+</div>
+</html>

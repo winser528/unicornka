@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>欢迎页</title>
+    <link th:href="@{/favicon.ico}" rel="shortcut icon" type="image/x-icon">
+    <link th:href="@{/static/luna/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/static/luna/main.css}" rel="stylesheet">
+    <link th:href="@{/static/luna/layui/css/yadmin.css}" rel="stylesheet">
+</head>
+<body class="yadmin-body animated fadeIn">
+    <div class="layui-row">
+        <div class="layui-card">
+            <div class="layui-card-header"><h2>欢迎使用管理后台!</h2></div>
+            <div class="layui-card-body layui-text layadmin-version">
+                <thead class="layui-card-header">
+                    <tr>
+                        <th colspan="2" scope="col">服务器信息</th>
+                    </tr>
+                </thead>
+                <table class="layui-card-body layui-table">
+                    <tr>
+                        <th width="30%">服务器计算机名</th>
+                        <td><span id="lbServerName">[[${os.computerName}]]</span></td>
+                    </tr>
+                    <tr>
+                        <td>项目所在文件夹</td>
+                        <td>[[${os.itemPath}]]</td>
+                    </tr>
+                    <tr>
+                        <td>服务器操作系统</td>
+                        <td>[[${os.osname}]]</td>
+                    </tr>
+                    <tr>
+                        <td>当前系统用户名</td>
+                        <td>[[${os.sysUserName}]]</td>
+                    </tr>
+                    <tr>
+                        <td>用户工作目录</td>
+                        <td>[[${os.userdir}]]</td>
+                    </tr>
+                    <tr>
+                        <td>服务器地址</td>
+                        <td>[[${os.ip}]]:[[${port}]]</td>
+                    </tr>
+                    <tr>
+                        <td>服务器MAC</td>
+                        <td>[[${os.mac}]]</td>
+                    </tr>
+                    <tr>
+                        <td>服务器当前时间</td>
+                        <td id="clock">[[${os.sysTime}]]</td>
+                    </tr>
+                    <tr>
+                        <td>服务器上次启动到现在已运行</td>
+                        <td id="runTime">[[${startDate}]]</td>
+                    </tr>
+                    <tr>
+                        <td>JAVA版本</td>
+                        <td>[[${os.java}]]</td>
+                    </tr>
+                    <tr>
+                        <td>虚拟机内存总量</td>
+                        <td>[[${os.vmRamTotal}]]</td>
+                    </tr>
+                    <tr>
+                        <td>当前程序占用内存</td>
+                        <td>[[${os.useRamTotal}]]</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        Date.prototype.Format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "H+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (let k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        };
+        window.onload = function () {
+            let runTimeElement = document.getElementById("runTime");
+            if (runTimeElement) {
+                let runTime = runTimeElement.innerHTML.trim() !== "" ? new Date(runTimeElement.innerHTML) : new Date();
+                //时间差的毫秒数
+                let lag = new Date().getTime() - runTime.getTime();
+                //计算出相差天数
+                let days = Math.floor(lag / (24 * 3600 * 1000));
+                //计算出小时数
+                let hours = Math.floor((lag % (24 * 3600 * 1000)) / (3600 * 1000));
+                document.getElementById("runTime").innerHTML = days + "天 " + hours + "小时 ";
+            }
+        };
+        if (document.getElementById('clock')) {
+            setInterval(function () {
+                document.getElementById("clock").innerHTML = new Date().Format("yyyy-MM-dd HH:mm:ss");
+            }, 1000);
+        }
+    </script>
+<!-- main end -->
+</html>

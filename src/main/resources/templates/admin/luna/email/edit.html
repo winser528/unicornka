@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑邮件模板')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <div class="layui-form-item">
+            <label for="tplName" class="layui-form-label"><span class="yadmin-red">*</span>邮件标题</label>
+            <div class="layui-input-block">
+                <input type="text" id="tplName" name="tplName" th:value="${bean?.tplName}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="tplToken" class="layui-form-label"><span class="yadmin-red">*</span>邮件标识</label>
+            <div class="layui-input-block">
+                <input type="text" id="tplToken" name="tplToken" th:value="${bean?.tplToken}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label for="tplContent" class="layui-form-label"><span class="yadmin-red">*</span>邮件内容</label>
+            <div class="layui-input-block">
+                <textarea id="tplContent" placeholder="请输入内容" rows="10" class="layui-textarea" style="resize: none;" name="tplContent" th:text="${bean?.tplContent}"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['form'], function (form) {
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/coupon/save', obj.field, true);
+            });
+        });
+    </script>
+</body>
+</html>

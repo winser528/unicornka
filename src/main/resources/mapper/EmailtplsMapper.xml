@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.EmailtplsDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Emailtpls">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tpl_name" jdbcType="VARCHAR" property="tplName" />
+    <result column="tpl_content" jdbcType="VARCHAR" property="tplContent" />
+    <result column="tpl_token" jdbcType="VARCHAR" property="tplToken" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tpl_name, tpl_content, tpl_token, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from emailtpls
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from emailtpls
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Emailtpls">
+    insert into emailtpls
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tplName != null">
+        tpl_name,
+      </if>
+      <if test="tplContent != null">
+        tpl_content,
+      </if>
+      <if test="tplToken != null">
+        tpl_token,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tplName != null">
+        #{tplName,jdbcType=VARCHAR},
+      </if>
+      <if test="tplContent != null">
+        #{tplContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tplToken != null">
+        #{tplToken,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Emailtpls">
+    update emailtpls
+    <set>
+      <if test="tplName != null">
+        tpl_name = #{tplName,jdbcType=VARCHAR},
+      </if>
+      <if test="tplContent != null">
+        tpl_content = #{tplContent,jdbcType=VARCHAR},
+      </if>
+      <if test="tplToken != null">
+        tpl_token = #{tplToken,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="tplName != null and tplName != ''">
+         and tpl_name = #{tplName,jdbcType=VARCHAR}
+      </if>
+      <if test="tplContent != null and tplContent != ''">
+         and tpl_content = #{tplContent,jdbcType=VARCHAR}
+      </if>
+      <if test="tplToken != null and tplToken != ''">
+         and tpl_token = #{tplToken,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Emailtpls" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from emailtpls
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from emailtpls
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from emailtpls
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from emailtpls
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

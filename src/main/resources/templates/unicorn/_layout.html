@@ -1,0 +1,87 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Keywords" content="{{ dujiaoka_config_get('keywords') }}">
+    <meta name="Description" content="{{ dujiaoka_config_get('description')  }}">
+    <title th:text="${title}">The awesome application</title>
+    <link th:href="@{/favicon.ico}" rel="shortcut icon" type="image/x-icon">
+    <link th:href="@{/static/unicorn/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/static/unicorn/css/base.css}" rel="stylesheet">
+    <link th:href="@{/static/unicorn/css/common.css}" rel="stylesheet">
+    <link th:href="@{/static/unicorn/css/index.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/unicorn/js/bootstrap.min.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- header start -->
+<header class="header sticky-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="header-left clearfix">
+                    <div class="logo text-center d-none d-md-block">
+                        <a href="/"><img th:src="@{/static/images/logo.png}" alt="Logo"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="header-right clearfix">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="/">我的网站</a>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                    aria-label="Toggle navigation"
+                                    data-bs-target="#navbarColor" aria-controls="navbarColor" aria-expanded="false">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarColor">
+                                <ul class="navbar-nav me-auto">
+                                    <li class="nav-item">
+                                        <a th:classappend="${#httpServletRequest.requestURI == '/'} ? 'active' : ''"
+                                           class="nav-link" href="/">主页</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a th:classappend="${#httpServletRequest.requestURI == '/order-search'} ? 'active' : ''"
+                                           class="nav-link" href="/order_search">搜索商品</a>
+                                    </li>
+                                </ul>
+                                <form class="d-flex">
+                                    <input class="form-control form-control-sm me-sm-2" id="searchText" type="text"
+                                           placeholder="搜索商品名称"/>
+                                    <button class="btn btn-secondary my-2 my-sm-0" type="button" id="searchBtn">
+                                        <i class="ali-icon">&#xe65c;</i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- header end -->
+<div th:include="::contents">
+
+</div>
+<!-- footer start-->
+<footer class="footer p-3">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="author">Powered by：<a href="#">@独角数卡</a></div>
+            <div class="custom"></div>
+        </div>
+    </div>
+</footer>
+<!-- footer end-->
+</body>
+</html>

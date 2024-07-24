@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('订单列表')"/>
+<body class="layui-layout">
+<div class="layui-fluid layui-col-space15">
+    <div class="layui-card">
+        <div class="layui-card-body" id="pays1" th:date-text="${pays1}">
+            <form class="layui-form yadmin-search-area input">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label for="simpleName" class="layui-form-label">关键字</label>
+                        <div class="layui-input-inline">
+                            <input type="hidden" name="pid" value=""/>
+                            <input type="text" name="simpleName" placeholder="输入简称" id="simpleName" class="layui-input" />
+                        </div>
+                        <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                            <i class="layui-icon layui-icon-search"></i>
+                        </button>
+                        <button type="reset" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                            <i class="layui-icon layui-icon-refresh"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <script type="text/html" id="toolbar">
+                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                    <i class="layui-icon layui-icon-delete" title="删除">删除</i>
+                </button>
+            </script>
+            <table class="layui-hide" id="table-list"></table>
+            <script type="text/html" id="column-toolbar">
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+                    <i class="layui-icon layui-icon-edit" title="查看">查看</i>
+                </button>
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['table', 'dtree', 'form', 'tablePlug'], function (table, dtree, form, tablePlug) {
+        var states = {"-1": "过期", "1": "待支付", "2": "待处理", "3": "处理中", "4": "已完成", "5": "处理失败", "6": "异常"};
+        var pays1 = JSON.parse(layui.$("#pays1").attr("date-text"));
+        table.render({
+            elem: '#table-list',
+            url: '/admin/order/list',
+            method: 'post',
+            dataType: 'JSON',
+            page: true,
+            toolbar: '#toolbar',
+            smartReloadModel: true,
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'discount', title: '订单号', minWidth: 120},
+                    {field: 'goodsId', title: '商品id', minWidth: 120},
+                    {field: 'couponId', title: '优惠码id', minWidth: 120},
+                    {field: 'title', title: '订单名称', minWidth: 120},
+                    {field: 'type', title: '订单类型', align: 'center', width: 90, templet: function (res) {
+                        return res.type == "1"?"自动发货":"人工处理";
+                    }},
+                    {field: 'goodsPrice', title: '商品单价', minWidth: 120},
+                    {field: 'buyAmount', title: '购买数量', minWidth: 120},
+                    {field: 'totalPrice', title: '订单总价', minWidth: 120},
+                    {field: 'email', title: '下单邮箱', minWidth: 120},
+                    {field: 'payId', title: '支付通道', minWidth: 120, templet: function (res) {
+                        return pays1[res.payId] || "";
+                    }},
+                    {field: 'tradeNo', title: '支付订单号', minWidth: 120},
+                    { field: 'status', title: '订单状态', align: 'center',width: 90, templet: function (res) {
+                            return states[res.status] || "";
+                    }},
+                    {fixed: 'right', title: '操作', align: 'center',width: 90, toolbar: '#column-toolbar'}
+                ]
+            ]
+        });
+        // 工具条点击事件
+        table.on('toolbar', function (obj) {
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么?', function (index) {
+                    let selectData = table.checkStatus('table-list').data;
+                    if (selectData.length > 0) {
+                        let idsArray = [];
+                        for (let i = 0; i < selectData.length; i++) {
+                            idsArray.push(selectData[i].id);
+                        }
+                        let ids = idsArray.toString();
+                        changeReq(ids, '/admin/order/del')
+                        layer.close(index);
+                    }
+                });
+            }
+        });
+        // 行点击事件
+        table.on('tool', function (obj) {
+            let data = obj.data, event = obj.event;
+            if (event === 'edit') {
+                openView("/admin/order/edit?id=" + data.id, "查看", "60%", "80%", false);
+            }
+        });
+        tablePlug.smartReload.enable(true);
+        form.on('submit(search)', function (form) {
+            table.reload('table-list', {
+                where: form.field
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

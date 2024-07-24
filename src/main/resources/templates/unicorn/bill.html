@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='支付页面')">
+<div th:fragment="contents">
+    <!-- main start -->
+    <section class="main-container">
+        <div class="container">
+            <div class="good-card">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-12">
+                        <div class="card m-3">
+                            <div class="card-body p-2 text-center">
+                                <h3 class="card-title text-primary ali-icon">&#xe832;确认订单</h3>
+                            </div>
+                            <div class="card card-body p-3 border-0">
+                                <div class="mx-auto">
+                                    <h5>
+                                        <small class="text-muted">订单编号：{{ $order_sn }}</small>
+                                    </h5>
+                                    <div class="mb-1">
+                                        <label>订单名称：</label><span>{{ $title }}</span>
+                                    </div>
+                                    <div class="mb-1"><label>商品单价：</label><span> {{ $goods_price }}</span></div>
+                                    <div class="mb-1"><label>购买数量：</label><span>{{ $buy_amount }}</span></div>
+                                    <div class="mb-1"><label>下单邮箱：</label><span>{{ $email }}</span></div>
+                                    <div class="mb-1">
+                                        <label>{{ __('order.fields.type') }}：</label>
+                                        @if($type == \App\Models\Order::AUTOMATIC_DELIVERY)
+                                        <span class="badge bg-success">自动发货</span>
+                                        @else
+                                        <span class="badge bg-warning">人工处理</span>
+                                        @endif
+                                    </div>
+                                    @if(!empty($coupon))
+                                    <div class="mb-1"><label>优惠码：</label><span>{{ $coupon['coupon'] }}</span></div>
+                                    <div class="mb-1"><label>优惠码优惠价格：</label><span>￥{{ $coupon_discount_price }}</span></div>
+                                    @endif
+                                    @if($wholesale_discount_price > 0 )
+                                    <div class="mb-1"><label>批发价优惠：</label><span>￥{{ $wholesale_discount_price }}</span></div>
+                                    @endif
+                                    @if(!empty($info))
+                                    <div class="mb-1"><label>订单资料：</label><p>{{ $info }}</p></div>
+                                    @endif
+                                    <div class="mb-1"><label>实际支付价格：</label><span>{{ __('dujiaoka.money_symbol') }}{{ $actual_price }}</span></div>
+                                    <div class="mb-1"><label>支付方式：</label><span>{{ $pay['pay_name'] }}</span></div>
+                                    <div class="mb-1"><label>订单创建时间：</label><span>{{ $created_at }}</span></div>
+
+                                    <div class="pay-now text-center mt-3">
+                                        <a href="{{ url('pay-gateway', ['handle' => urlencode($pay['pay_handleroute']),'payway' => $pay['pay_check'], 'orderSN' => $order_sn]) }}" type="button" class="btn btn-dark">
+                                            <i class="ali-icon">&#xe673;</i>立即支付
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- main end -->
+</div>
+</html>

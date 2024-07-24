@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑商品')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane" lay-filter="form-goods">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <div class="layui-form-item">
+            <label for="groupId" class="layui-form-label">选择商品组</label>
+            <div class="layui-input-block">
+                <select name="groupId" id="groupId" lay-verify="required"></select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="gdName" class="layui-form-label"><span class="yadmin-red">*</span>商品名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="gdName" name="gdName" th:value="${bean?.gdName}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="gdDescription" class="layui-form-label"><span class="yadmin-red">*</span>商品描述</label>
+            <div class="layui-input-block">
+                <input type="text" id="gdDescription" name="gdDescription" th:value="${bean?.gdDescription}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="gdKeywords" class="layui-form-label"><span class="yadmin-red">*</span>商品关键字</label>
+            <div class="layui-input-block">
+                <input type="text" id="gdKeywords" name="gdKeywords" th:value="${bean?.gdKeywords}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="retailPrice" class="layui-form-label"><span class="yadmin-red">*</span>零售价</label>
+            <div class="layui-input-block">
+                <input type="text" id="retailPrice" name="retailPrice" th:value="${bean?.retailPrice}" lay-verify="required|price" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="actualPrice" class="layui-form-label"><span class="yadmin-red">*</span>实际售价</label>
+            <div class="layui-input-block">
+                <input type="text" id="actualPrice" name="actualPrice" th:value="${bean?.actualPrice}" lay-verify="required|price" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="inStock" class="layui-form-label"><span class="yadmin-red">*</span>库存</label>
+            <div class="layui-input-block">
+                <input type="text" id="inStock" name="inStock" th:value="${bean?.inStock}" lay-verify="required|number" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ord" class="layui-form-label"><span class="yadmin-red">*</span>排序</label>
+            <div class="layui-input-block">
+                <input type="text" id="ord" name="ord" th:value="${bean?.ord?:1}" lay-verify="required|number" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="buyLimitNum" class="layui-form-label"><span class="yadmin-red">*</span>单次购买数</label>
+            <div class="layui-input-block">
+                <input type="text" id="buyLimitNum" name="buyLimitNum" th:value="${bean?.buyLimitNum?:0}" lay-verify="required|number" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="buyPrompt" class="layui-form-label"><span class="yadmin-red">*</span>购买提示</label>
+            <div class="layui-input-block">
+                <input type="text" id="buyPrompt" name="buyPrompt" th:value="${bean?.buyPrompt}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">商品类型</label>
+            <div class="layui-input-block">
+                <input type="radio" id="radioType" name="type" value="1" title="自动发货" />
+                <input type="radio" name="type" value="2" title="人工处理" checked />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" id="isOpen" name="isOpen" value="true" title="是" />
+                <input type="radio" name="isOpen" value="false" title="否" checked />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['jquery', 'form'], function ($, form) {
+            $.ajax({
+                type: "POST",
+                url: '/admin/goods/group/list',
+                dataType: 'json',
+                cache: false,
+                success: function (resp) {
+                    if (resp != null || resp.data.length > 0) {
+                        var $select = $("#groupId"), list = resp.data;
+                        for (var i in list){
+                            $select.append($("<option></option>").val(list[i].id).text(list[i].gpName));
+                        }
+                    }
+                    form.val('form-goods', {'groupId' : "[[${bean?.groupId}]]"});
+                    form.render('select');
+                },
+                error: function (event) {
+                    errors(event);
+                }
+            });
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/goods/save', obj.field, true);
+            });
+        });
+    </script>
+</body>
+</html>

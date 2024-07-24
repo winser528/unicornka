@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='首页')">
+<div th:fragment="contents">
+    <div class="notice" >
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <div class="jumbotron jumbotron-fluid p-1">
+                                <div class="container">
+                                    <h4 class="">公告：</h4>
+                                    <p class="lead">内容</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- main start -->
+    <section class="main-container">
+        <!-- category start -->
+        <div class="category">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-center">
+                            <span style="vertical-align: inherit;">今天需要一点什么？</span>
+                        </h3>
+                        <div class="separator"></div>
+                        <p class="lead text-center">
+                            <span style="vertical-align: inherit;">优质的商品和卓越的客户服务代表完美的交易流程体现。</span>
+                        </p>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="category-menus">
+                            <ul class="nav nav-pills  justify-content-center">
+                                <li class="nav-item">
+                                    <a href="#group-all" data-bs-toggle="tab" class="btn btn-outline-secondary active">全部</a>
+                                </li>
+                                <li class="nav-item" th:each="group, index : ${groups}">
+                                    <a th:href="'#group-' + ${group.id}" data-bs-toggle="tab" class="btn btn-outline-secondary">分类名称</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- category end -->
+        <!-- goods start -->
+        <div class="goods">
+            <div class="container">
+                <div class="goods-list mb-5">
+                    <div id="goodsTabContent" class="tab-content">
+                        <div class="tab-pane fade active show" id="group-all">
+                            <div class="row row-cols-2 row-cols-md-5 g-4" th:each="group, index : ${groups}">
+                                <div class="col" th:each="good : ${group.goods}">
+                                    <div class="card position-relative">
+                                        @if($goods['type'] == \App\Models\Goods::AUTOMATIC_DELIVERY)
+                                        <span class="badge bg-success position-absolute top-0 start-0">
+                                            <i class="ali-icon">&#xe7db;</i>自动发货
+                                        </span>
+                                        @else
+                                        <span class="badge bg-warning position-absolute top-0 start-0">
+                                            <i class="ali-icon">&#xe74b;</i>人工处理
+                                        </span>
+                                        @endif
+                                        <img src="{{ picture_ulr($goods['picture']) }}" class="card-img-top" alt="{{ $goods['gd_name'] }}">
+                                        <div class="card-body">
+                                            <h6 class="card-title text-truncate">商品名称</h6>
+                                            <button type="button" class="btn btn-sm btn-outline-success">
+                                                <i class="ali-icon">&#xe703;</i>
+                                                <strong>实际售价</strong>
+                                            </button>
+                                            <button th:if="${goods.wholesale_price_cnf}" type="button" class="btn btn-sm btn-outline-warning">
+                                                <i class="ali-icon">&#xe77d;</i>折扣
+                                            </button>
+                                            <h6 class="mt-2"><small class="text-muted">库存：{{ $goods['in_stock'] }}</small></h6>
+                                            <a href="/buy/" class="btn btn-primary fr"><i class="ali-icon">&#xe7d8;</i>下单</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- goods end -->
+    </section>
+    <!-- main end -->
+</div>
+</html>

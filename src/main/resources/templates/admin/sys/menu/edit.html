@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑菜单')"/>
+<body>
+    <div class="yadmin-body animated fadeIn">
+        <div class="layui-form layui-form-pane">
+            <input type="hidden" name="id" th:value="${menu?.id}" />
+            <input type="hidden" id="level" name="level" th:value="${menu?.level}" />
+            <div class="layui-form-item">
+                <label for="menuTree" class="layui-form-label"><span class="yadmin-red">*</span>上级名称</label>
+                <div class="layui-input-block">
+                    <ul id="menuTree" class="dtree" data-id="0" data-value="选择上级名称"></ul>
+                    <input type="hidden" id="pid" name="pid" th:value="${pid}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="name" class="layui-form-label"><span class="yadmin-red">*</span>名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="name" placeholder="请输入名称" name="name" th:value="${menu?.name}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="mold" class="layui-form-label"><span class="yadmin-red">*</span>类型</label>
+                <div class="layui-input-block">
+                    <select id="mold" name="mold" class="layui-input" lay-verify="required" lay-vertype="tips">
+                        <option>请选择</option>
+                        <option value="1" <c:if test="${menu.mold eq 1}">selected</c:if> >目录</option>
+                        <option value="2" <c:if test="${menu.mold eq 2}">selected</c:if> >按钮</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="url" class="layui-form-label">访问地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="url" placeholder="请输入访问地址" name="url" th:value="${menu?.url}" lay-vertype="tips" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="icon" class="layui-form-label">图标</label>
+                <div class="layui-input-block">
+                    <input type="text" id="icon" placeholder="请选择图标" name="icon" th:value="${menu?.icon}" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="sort" class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" id="sort" placeholder="请输入序号" name="sort" th:value="${menu?.sort}" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="enabled" value="1" title="正常" />
+                    <input type="radio" name="enabled" value="0" title="冻结" checked />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="notes" class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" id="notes" placeholder="说点什么..." name="notes" th:value="${menu?.notes}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block layui-align">
+                    <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['jquery', 'form', 'dtree', 'iconPicker'], function ($, form, dtree, iconPicker) {
+            iconPicker.init("#icon");
+
+            dtree.on("node('menuTree')", function (obj) {
+                let typeDom = $('#pid');
+                if (typeDom.val() === obj.param.nodeId) {
+                    typeDom.val('');
+                    $("input[dtree-id='pid']").val('请选择');
+                } else {
+                    typeDom.val(obj.param.nodeId)
+                    $("#level").val(parseInt(obj.param.level) + 1);
+                }
+            });
+
+            dtree.renderSelect({
+                elem: "#menuTree",
+                url: "/admin/menu/tree",
+                dataStyle: "layuiStyle",
+                selectInitVal: 1,
+                width: "100%",
+                method: "post",
+                menubar: true,
+                dataFormat: "list",
+                ficon: ["1", "-1"],
+                done: function (data, obj, first) {
+                    if (first) {
+                        dtree.dataInit("menuTree", $('#pid').val());
+                        dtree.selectVal("menuTree");
+                    }
+                    $('input:radio[name=menuFlag][value="${menu?.enabled}"]').prop("checked", true);
+                    form.render('radio');
+                }
+            });
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/menu/save', obj.field, true);
+            });
+        });
+    </script>
+</body>>
+</html>

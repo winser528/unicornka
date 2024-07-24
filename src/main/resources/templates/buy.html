@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='购买商品')">
+<th:block th:fragment="contents">
+    <!-- main start -->
+    <div class="main">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                <div class="main-box">
+                    <div class="title" style="border-bottom: 1px solid #f7f7f7;padding-bottom: 5px">
+                        <img th:src="@{/static/images/goods.png}" alt="goods" />
+                        <span>商品详情</span>
+                    </div>
+                    <div class="layui-col-md4 layui-col-sm12">
+                        <div class="goods-img">
+                            <img class="viewer-pictures" th:src="${g.picture?:'/static/images/default.png'}" th:data-original="${g.picture}" />
+                        </div>
+                    </div>
+                    <form class="layui-form layui-form-pane" action="{{ url('create-order') }}" method="post">
+                        <input type="hidden" name="gid" th:value="${g.id}">
+                        <div class="layui-col-md8 layui-col-sm12">
+                            <div class="goods-msg">
+                                <div class="goods-name">
+                                    <img th:src="@{/static/images/rocket.png}" alt="rocket" />
+                                    <span th:text="${g.gdName}"></span>
+                                    <span class="small-tips" th:text="${g.type==1?'自动发货':'人工处理'}"
+                                          th:classappend="${g.type==1?'tips-green':'tips-yellow'}"></span>
+                                    <span class="small-tips tips-blue" id="inStock" th:data-val="${g.inStock}">
+                                        库存([[${g.inStock}]])</span>
+                                    <span class="small-tips tips-red" id="buyLimitNum" th:data-val="${g.buyLimitNum}"
+                                          th:if="${g.buyLimitNum!=0}"> 每单限([[${g.buyLimitNum}]])</span>
+                                </div>
+                                <div class="price">
+                                    <span class="price-sign">￥</span>
+                                    <span class="price-num" th:text="${g.actualPrice}"></span>
+                                    <span class="price-c" th:if="${g.retailPrice}">[<del>￥[[${g.retailPrice}]]</del>]</span>
+                                </div>
+
+                                <div class="sale" th:if="${g.wholesalePriceCnf}">
+                                    <span class="small-tips tips-pink" th:each="w: ${g.wholesalePriceCnf}">
+                                        [[ ${w.goodsDisc} ${w.number} ]]
+                                    </span>
+                                </div>
+                                <div class="entry notSelection">
+                                    <span class="l-msg">购买数量：</span>
+                                    <label class="input">
+                                        <img class="sub" th:src="@{/static/images/jian.png}" alt="jian" />
+                                        <input class="pay-num" name="by_amount" id="orderNumber" lay-verify="required|orderNumber" type="number" value="1" />
+                                        <img class="add" th:src="@{/static/images/jia.png}" alt="jia" />
+                                    </label>
+                                </div>
+                                <div class="entry">
+                                    <span class="l-msg">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</span>
+                                    <label class="input">
+                                        <input type="text" name="email" required lay-verify="required|email" placeholder="请输入邮箱" />
+                                    </label>
+                                </div>
+                                <div class="entry" >
+                                    <span class="l-msg">优&nbsp;&nbsp;惠&nbsp;&nbsp;码：</span>
+                                    <label class="input">
+                                        <input type="text" name="coupon_code" placeholder="请输入优惠吗" />
+                                    </label>
+                                </div>
+
+                                <div class="entry" th:if="${is_open_search_pwd}">
+                                    <span class="l-msg">查询密码：</span>
+                                    <label class="input">
+                                        <input type="text" name="search_pwd" required lay-verify="required" placeholder="请填写订单的查询密码" />
+                                    </label>
+                                </div>
+                                <div class="entry code" th:if="${not is_open_geetest}">
+                                    <span class="l-msg">验&nbsp;&nbsp;证&nbsp;&nbsp;码：</span>
+                                    <label class="input">
+                                        <input type="text" name="img_verify_code" required lay-verify="required" placeholder="请输入" />
+                                    </label>
+                                    <img class="captcha-img" id="lay-get-captcha" th:src="@{/captcha}" style="cursor: pointer;" />
+                                    <script>
+                                        document.querySelector("#lay-get-captcha").addEventListener("click", function() {
+                                            this.src = "/captcha?p=" + Math.random();
+                                        });
+                                    </script>
+                                </div>
+                                <div class="entry code" th:if="${is_open_geetest}">
+                                    <span class="l-msg">行为验证：</span>
+                                    <span id="geetest-captcha"></span>
+                                    <span id="wait-geetest-captcha" class="show">正在加载验证码...</span>
+                                </div>
+                                <div class="pay notSelection">
+                                    <input type="hidden" name="payway" lay-verify="payway" value="0">
+                                    <div th:each="p: ${pays}" class="pay-type" th:classappend="${pStat.first}? 'pay-select'"
+                                         th:data-type="${p.payCheck}" th:data-id="${p.id}" th:data-name="${p.payName}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-sm12 buy" style="text-align: center">
+                            <button lay-submit lay-filter="postOrder"><span>下单</span></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                <div class="main-box">
+                    <div class="title" style="border-bottom: 1px solid #f7f7f7;padding-bottom: 5px">
+                        <img th:src="@{/static/images/details.png}" alt="details" />
+                        <span>商品描述</span>
+                    </div>
+                    <div class="intro" th:text="${g.description}">商品描述
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="query-m">
+        <a href="{{ url('order-search') }}">
+            <img style="margin: 5px 15px;" th:src="@{/static/images/orders.png}" alt="orders" />
+            <span>查单</span>
+        </a>
+    </div>
+
+    <div class="order-m">
+        <div th:onclick="window.showQrcode('data:image/png;base64,${qrCode}')">
+            <img th:src="@{/static/images/qrscan.png}" alt="qrscan" style="margin: 6px 0 0 18px;" />
+            <span>手机下单</span>
+        </div>
+    </div>
+</th:block>
+</html>

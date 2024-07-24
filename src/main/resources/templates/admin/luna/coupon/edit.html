@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑优惠券')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <div class="layui-form-item">
+            <label for="discount" class="layui-form-label"><span class="yadmin-red">*</span>优惠金额</label>
+            <div class="layui-input-block">
+                <input type="text" id="discount" name="discount" th:value="${bean?.discount}" lay-verify="required|price" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="coupon" class="layui-form-label"><span class="yadmin-red">*</span>优惠码</label>
+            <div class="layui-input-block">
+                <input type="text" id="coupon" name="coupon" th:value="${bean?.coupon}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ret" class="layui-form-label">使用次数</label>
+            <div class="layui-input-block">
+                <input type="text" id="ret" name="ret" th:value="${bean?.ret}" lay-verify="required|number" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['form'], function (form) {
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/coupon/save', obj.field, false)
+            });
+        });
+    </script>
+</body>
+</html>

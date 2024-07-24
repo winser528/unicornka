@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑支付')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <div class="layui-form-item">
+            <label for="payName" class="layui-form-label"><span class="yadmin-red">*</span>支付名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="payName" name="payName" th:value="${bean?.payName}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="payCheck" class="layui-form-label"><span class="yadmin-red">*</span>支付标识</label>
+            <div class="layui-input-block">
+                <input type="text" id="payCheck" name="payCheck" th:value="${bean?.payCheck}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="payClient" class="layui-form-label">支付场景</label>
+            <div class="layui-input-block">
+                <select id="payClient" name="payClient" class="layui-input" lay-verify="required" lay-vertype="tips">
+                    <option value="1" th:selected="${bean?.payClient eq 1}">电脑</option>
+                    <option value="2" th:selected="${bean?.payClient eq 2}">手机</option>
+                    <option value="3" th:selected="${bean?.payClient eq 3}">全部</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="payMethod" class="layui-form-label">支付方式</label>
+            <div class="layui-input-block">
+                <select id="payMethod" name="payClient" class="layui-input" lay-verify="required" lay-vertype="tips">
+                    <option value="1" th:selected="${bean?.payMethod eq 1}">跳转</option>
+                    <option value="2" th:selected="${bean?.payMethod eq 2}">扫码</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="merchantAccount" class="layui-form-label"><span class="yadmin-red">*</span>商户账户</label>
+            <div class="layui-input-block">
+                <input type="text" id="merchantAccount" name="merchantAccount" th:value="${bean?.merchantAccount}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="merchantId" class="layui-form-label"><span class="yadmin-red">*</span>商户ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="merchantId" name="merchantId" th:value="${bean?.merchantId}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="merchantKey" class="layui-form-label"><span class="yadmin-red">*</span>商户公钥</label>
+            <div class="layui-input-block">
+                <input type="text" id="merchantKey" name="merchantKey" th:value="${bean?.merchantKey}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="merchantPem" class="layui-form-label"><span class="yadmin-red">*</span>商户私钥</label>
+            <div class="layui-input-block">
+                <input type="text" id="merchantPem" name="merchantPem" th:value="${bean?.merchantPem}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="notifyUrl" class="layui-form-label"><span class="yadmin-red">*</span>回调通知</label>
+            <div class="layui-input-block">
+                <input type="text" id="notifyUrl" name="notifyUrl" th:value="${bean?.notifyUrl}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="returnUrl" class="layui-form-label"><span class="yadmin-red">*</span>同步通知</label>
+            <div class="layui-input-block">
+                <input type="text" id="returnUrl" name="returnUrl" th:value="${bean?.returnUrl}" lay-verify="required" lay-vertype="tips" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" id="isOpen" name="isOpen" value="true" title="正常" />
+                <input type="radio" name="isOpen" value="false" title="冻结" checked />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['jquery', 'form'], function ($, form) {
+            $('input:radio[name=isOpen][value="[[${bean?.isOpen}]]"]').prop("checked", true);
+            form.render('radio');
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/pay/save', obj.field, false);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑商品组')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <div class="layui-form-item">
+            <label for="gpName" class="layui-form-label"><span class="yadmin-red">*</span>分类名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="gpName" name="gpName" th:value="${bean?.gpName}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="ord" class="layui-form-label">分类排序</label>
+            <div class="layui-input-block">
+                <input type="text" id="ord" name="ord" th:value="${bean?.ord?:1}" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" id="isOpen" name="isOpen" value="true" title="是" />
+                <input type="radio" name="isOpen" value="false" title="否" checked />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['form'], function (form) {
+            layui.$('input:radio[name=isOpen][value="[[${bean?.isOpen}]]"]').prop("checked", true);
+            form.render('radio');
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/goods/group/save', obj.field, true);
+            });
+        });
+    </script>
+</body>
+</html>

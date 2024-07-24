@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('支付列表')"/>
+<body class="layui-layout">
+    <div class="layui-fluid layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <form class="layui-form yadmin-search-area input">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label for="simpleName" class="layui-form-label">关键字</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="pid" value=""/>
+                                <input type="text" name="simpleName" autocomplete="off" placeholder="输入简称" id="simpleName" class="layui-input" />
+                            </div>
+                            <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                                <i class="layui-icon layui-icon-search"></i>
+                            </button>
+                            <button type="reset" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                                <i class="layui-icon layui-icon-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <table class="layui-hide" id="table-list"></table>
+                <script type="text/html" id="column-toolbar">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+                        <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
+                    </button>
+                </script>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['table', 'form'], function (table, form) {
+            table.render({
+                elem: '#table-list',
+                url: '/admin/pay/list',
+                method: 'post',
+                dataType: 'JSON',
+                page: true,
+                smartReloadModel: true,
+                cols: [
+                    [
+                        {type: 'checkbox'},
+                        {field: 'payName', title: '支付名称', minWidth: 150},
+                        {field: 'payCheck', title: '支付标识', minWidth: 150},
+                        {field: 'payMethod', title: '支付方式', align: 'center', width: 90, templet: function (res) {
+                            return res.payMethod == "1"?"电脑":res.payMethod == "2"?"手机":"全部";
+                        }},
+                        {field: 'payClient', title: '支付场景', align: 'center', width: 90, templet: function (res) {
+                            return res.payClient == "1"?"跳转":"扫码";
+                        }},
+                        {field: 'merchantId', title: '商户ID', minWidth: 130},
+                        { field: 'isOpen', title: '启用状态', align: 'center', width: 90, templet: function (res) {
+                            return res.isOpen == "1"?"是":"否";
+                        }},
+                        {fixed: 'right', title: '操作', align: 'center',width: 100, toolbar: '#column-toolbar'}
+                    ]
+                ]
+            });
+            // 行点击事件
+            table.on('tool', function (obj) {
+                let data = obj.data, event = obj.event;
+                if (event === 'edit') {
+                    editView("/admin/pay/edit?id=" + data.id, "编辑优惠");
+                }
+            });
+
+            form.on('submit(search)', function (form) {
+                table.reload('table-list', {
+                    where: form.field
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

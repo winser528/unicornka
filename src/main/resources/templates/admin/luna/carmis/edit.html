@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑优惠券')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane" lay-filter="form-goods">
+        <input type="hidden" name="id" th:value="${bean?.id}" />
+        <input type="hidden" id="gdName" name="gdName" th:value="${bean?.gdName}" />
+        <div class="layui-form-item">
+            <label for="goodsId" class="layui-form-label">商品信息</label>
+            <div class="layui-input-block">
+                <select id="goodsId" name="goodsId" lay-verify="required" lay-filter="selFilter" lay-search="" >
+                    <option value="">直接选择或搜索选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">卡密状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="true" title="未售出" checked/>
+                <input type="radio" id="status" name="status" value="false" title="已售出" />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">循环卡密</label>
+            <div class="layui-input-block">
+                <input type="radio" id="isLoop" name="isLoop" value="true" title="是" />
+                <input type="radio" name="isLoop" value="false" title="否" checked />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['jquery', 'form'], function ($, form) {
+            $.ajax({
+                type: "POST",
+                url: '/admin/goods/list',
+                dataType: 'json',
+                cache: false,
+                success: function (resp) {
+                    if (resp != null || resp.data.length > 0) {
+                        var $select = $("#goodsId"), list = resp.data;
+                        for (var i in list){
+                            $select.append($("<option></option>").val(list[i].id).text(list[i].gdName));
+                        }
+                    }
+                    form.val('form-goods', {'goodsId' : "[[${bean?.goodsId}]]"});
+                    form.render('select');
+                    $('input:radio[name=status][value="[[${bean?.status}]]"]').prop("checked", true);
+                    $('input:radio[name=isLoop][value="[[${bean?.isLoop}]]"]').prop("checked", true);
+                    form.render('radio');
+                },
+                error: function (event) {
+                    errors(event);
+                }
+            });
+
+            form.on('select(selFilter)', function(data){
+                $('#gdName').val(data.elem[data.elem.selectedIndex].text); // 将选中的文本设置到input中
+            });
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/carmis/save', obj.field, true);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='搜索订单')">
+<div th:fragment="contents">
+<!-- main start -->
+<section class="main-container">
+    <div class="container">
+        <div class="good-card">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-12">
+                    <div class="card m-3">
+                        <div class="card-body p-4">
+                            <h3 class="card-title">订单查询</h3>
+                            <h6><small class="text-muted">最多只能查询最近 5 笔订单</small></h6>
+                            <div class="buy-form mt-3">
+                                <ul class="nav nav-pills mb-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#order_search_by_sn">订单号查询</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#order_search_by_email">下单邮箱查询</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#order_search_by_browser">浏览器查询</a>
+                                    </li>
+
+                                </ul>
+                                <div id="searchTabContent" class="tab-content">
+                                    <div class="tab-pane fade active show" id="order_search_by_sn">
+                                        <form action="{{ url('search-order-by-sn') }}" method="post" >
+                                            <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                            <div class="form-group row">
+                                                <div class="col-12 col-md-8">
+                                                    <label for="orderSN" class="col-form-label">订单号:</label>
+                                                    <input type="text" class="form-control form-control-sm"
+                                                           id="orderSN"  name="order_sn" required placeholder="订单号">
+                                                </div>
+                                                <div class="col-12 mt-3">
+                                                    <button type="submit" class="btn btn-outline-primary"><i class="ali-icon">&#xe65c;</i> 立即查询</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="order_search_by_email">
+                                        <form action="{{ url('search-order-by-email') }}" method="post">
+                                            <div class="form-group row">
+                                                <div class="col-12 col-md-8">
+                                                    <label for="email" class="col-form-label">下单邮箱:</label>
+                                                    <input type="email" class="form-control form-control-sm" id="email" name="email" required placeholder="">
+                                                </div>
+                                                <div class="col-12 col-md-8">
+                                                    <label for="searchPwd" class="col-form-label">查询密码:</label>
+                                                    <input type="password" class="form-control form-control-sm"
+                                                           id="searchPwd" name="search_pwd" required placeholder="">
+                                                </div>
+                                                <div class="col-12 mt-3">
+                                                    <button type="submit" class="btn btn-outline-primary"><i class="ali-icon">&#xe65c;</i> 立即查询</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="order_search_by_browser">
+                                        <form action="{{ url('search-order-by-browser') }}"  method="post">
+                                            <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                                            <div class="form-group row">
+                                                <div class="col-12 mt-3">
+                                                    <button type="submit" class="btn btn-outline-primary">
+                                                        <i class="ali-icon">&#xe65c;</i> 立即查询</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- main end -->
+</div>
+</html>

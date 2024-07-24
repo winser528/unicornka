@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='首页')">
+<th:block th:fragment="contents">
+    <div class="main">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                <div class="main-box">
+                    <div class="title">
+                        <img th:src="@{/static/images/classify.png}" alt="classify"/>
+                        <span>选择分类</span>
+                    </div>
+                    <div class="cate">
+                        <div class="cate-box"  th:each="g : ${groups1}" th:data-key="${g.id}" th:classappend="${gStat.first}? 'cate-box-select'">
+                            <p th:text="${g.gpName}"></p>
+                            <div>商品数量：[[${g.size}]]</div>
+                        </div>
+                    </div>
+                    <div class="goods">
+                        <p class="title-2">
+                            <img th:src="@{/static/images/choose.png}" alt="choose"/>
+                            <span>选择商品</span>
+                        </p>
+                        <div class="goods-list">
+                            <a th:each="d: ${goods1}" th:href="${d.inStock > 0?'/buy/'+d.id:'javascript:void(0);'}"
+                               class="goods-box" th:style="${d.inStock <= 0?'cursor:not-allowed;':''}">
+                                <div th:if="${d.picture}" class="picture">
+                                    <img src="{{ picture_ulr('',true) }}<< d.picture >>" alt="">
+                                </div>
+                                <div class="msg">
+                                    <div class="goods-name" th:text="${d.gdName}">商品名</div>
+                                    <div class="goods-price">
+                                        ￥[[ ${d.actualPrice}]]
+                                        <div th:each="w,iterStat:${d.wholesalePriceCnf}">
+                                            [[ ${w.goodsDisc} ${iterStat.count}]]
+                                        </div>
+                                    </div>
+                                    <div class="goods-num">
+                                        <div>
+                                            <p th:style="'width:'+${((d.inStock/(d.inStock+d.salesVolume))*100)}+'%;'"></p>
+                                        </div>
+                                        <span>剩余[[${d.inStock}]]件</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<!-- main end -->
+</html>

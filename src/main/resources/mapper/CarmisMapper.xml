@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.CarmisDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Carmis">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="gd_name" jdbcType="VARCHAR" property="gdName" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="is_loop" jdbcType="BIT" property="isLoop" />
+    <result column="carmi" jdbcType="VARCHAR" property="carmi" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, goods_id, gd_name, `status`, is_loop, carmi, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from carmis
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from carmis
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Carmis">
+    insert into carmis
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="gdName != null">
+        gd_name,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="isLoop != null">
+        is_loop,
+      </if>
+      <if test="carmi != null">
+        carmi,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="gdName != null">
+        #{gdName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="isLoop != null">
+        #{isLoop,jdbcType=BIT},
+      </if>
+      <if test="carmi != null">
+        #{carmi,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Carmis">
+    update carmis
+    <set>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="gdName != null">
+        gd_name = #{gdName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=BIT},
+      </if>
+      <if test="isLoop != null">
+        is_loop = #{isLoop,jdbcType=BIT},
+      </if>
+      <if test="carmi != null">
+        carmi = #{carmi,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="goodsId != null and goodsId != ''">
+         and goods_id = #{goodsId,jdbcType=BIGINT}
+      </if>
+      <if test="gdName != null and gdName != ''">
+         and gd_name = #{gdName,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null and status != ''">
+         and `status` = #{status,jdbcType=BIT}
+      </if>
+      <if test="isLoop != null and isLoop != ''">
+         and is_loop = #{isLoop,jdbcType=BIT}
+      </if>
+      <if test="carmi != null and carmi != ''">
+         and carmi = #{carmi,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Carmis" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from carmis
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from carmis
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from carmis
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from carmis
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.OrdersDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Orders">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_sn" jdbcType="VARCHAR" property="orderSn" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="coupon_id" jdbcType="BIGINT" property="couponId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="BIT" property="type" />
+    <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
+    <result column="buy_amount" jdbcType="INTEGER" property="buyAmount" />
+    <result column="coupon_discount_price" jdbcType="DECIMAL" property="couponDiscountPrice" />
+    <result column="wholesale_discount_price" jdbcType="DECIMAL" property="wholesaleDiscountPrice" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="actual_price" jdbcType="DECIMAL" property="actualPrice" />
+    <result column="search_pwd" jdbcType="VARCHAR" property="searchPwd" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="pay_id" jdbcType="BIGINT" property="payId" />
+    <result column="buy_ip" jdbcType="VARCHAR" property="buyIp" />
+    <result column="trade_no" jdbcType="VARCHAR" property="tradeNo" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="coupon_ret_back" jdbcType="BIT" property="couponRetBack" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, order_sn, goods_id, coupon_id, title, `type`, goods_price, buy_amount, coupon_discount_price, 
+    wholesale_discount_price, total_price, actual_price, search_pwd, email, info, pay_id, 
+    buy_ip, trade_no, `status`, coupon_ret_back, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from orders
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderSn != null">
+        order_sn,
+      </if>
+      <if test="goodsId != null">
+        goods_id,
+      </if>
+      <if test="couponId != null">
+        coupon_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="goodsPrice != null">
+        goods_price,
+      </if>
+      <if test="buyAmount != null">
+        buy_amount,
+      </if>
+      <if test="couponDiscountPrice != null">
+        coupon_discount_price,
+      </if>
+      <if test="wholesaleDiscountPrice != null">
+        wholesale_discount_price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="actualPrice != null">
+        actual_price,
+      </if>
+      <if test="searchPwd != null">
+        search_pwd,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="info != null">
+        info,
+      </if>
+      <if test="payId != null">
+        pay_id,
+      </if>
+      <if test="buyIp != null">
+        buy_ip,
+      </if>
+      <if test="tradeNo != null">
+        trade_no,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="couponRetBack != null">
+        coupon_ret_back,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderSn != null">
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="couponId != null">
+        #{couponId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="goodsPrice != null">
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="buyAmount != null">
+        #{buyAmount,jdbcType=INTEGER},
+      </if>
+      <if test="couponDiscountPrice != null">
+        #{couponDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="wholesaleDiscountPrice != null">
+        #{wholesaleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null">
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="searchPwd != null">
+        #{searchPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="payId != null">
+        #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="buyIp != null">
+        #{buyIp,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="couponRetBack != null">
+        #{couponRetBack,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Orders">
+    update orders
+    <set>
+      <if test="orderSn != null">
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null">
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="couponId != null">
+        coupon_id = #{couponId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=BIT},
+      </if>
+      <if test="goodsPrice != null">
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="buyAmount != null">
+        buy_amount = #{buyAmount,jdbcType=INTEGER},
+      </if>
+      <if test="couponDiscountPrice != null">
+        coupon_discount_price = #{couponDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="wholesaleDiscountPrice != null">
+        wholesale_discount_price = #{wholesaleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null">
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="searchPwd != null">
+        search_pwd = #{searchPwd,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null">
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="payId != null">
+        pay_id = #{payId,jdbcType=BIGINT},
+      </if>
+      <if test="buyIp != null">
+        buy_ip = #{buyIp,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeNo != null">
+        trade_no = #{tradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=BIT},
+      </if>
+      <if test="couponRetBack != null">
+        coupon_ret_back = #{couponRetBack,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="orderSn != null and orderSn != ''">
+         and order_sn = #{orderSn,jdbcType=VARCHAR}
+      </if>
+      <if test="goodsId != null and goodsId != ''">
+         and goods_id = #{goodsId,jdbcType=BIGINT}
+      </if>
+      <if test="couponId != null and couponId != ''">
+         and coupon_id = #{couponId,jdbcType=BIGINT}
+      </if>
+      <if test="title != null and title != ''">
+         and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null and type != ''">
+         and `type` = #{type,jdbcType=BIT}
+      </if>
+      <if test="goodsPrice != null and goodsPrice != ''">
+         and goods_price = #{goodsPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="buyAmount != null and buyAmount != ''">
+         and buy_amount = #{buyAmount,jdbcType=INTEGER}
+      </if>
+      <if test="couponDiscountPrice != null and couponDiscountPrice != ''">
+         and coupon_discount_price = #{couponDiscountPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="wholesaleDiscountPrice != null and wholesaleDiscountPrice != ''">
+         and wholesale_discount_price = #{wholesaleDiscountPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="totalPrice != null and totalPrice != ''">
+         and total_price = #{totalPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="actualPrice != null and actualPrice != ''">
+         and actual_price = #{actualPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="searchPwd != null and searchPwd != ''">
+         and search_pwd = #{searchPwd,jdbcType=VARCHAR}
+      </if>
+      <if test="email != null and email != ''">
+         and email = #{email,jdbcType=VARCHAR}
+      </if>
+      <if test="info != null and info != ''">
+         and info = #{info,jdbcType=VARCHAR}
+      </if>
+      <if test="payId != null and payId != ''">
+         and pay_id = #{payId,jdbcType=BIGINT}
+      </if>
+      <if test="buyIp != null and buyIp != ''">
+         and buy_ip = #{buyIp,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeNo != null and tradeNo != ''">
+         and trade_no = #{tradeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null and status != ''">
+         and `status` = #{status,jdbcType=BIT}
+      </if>
+      <if test="couponRetBack != null and couponRetBack != ''">
+         and coupon_ret_back = #{couponRetBack,jdbcType=BIT}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Orders" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from orders
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from orders
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from orders
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from orders
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

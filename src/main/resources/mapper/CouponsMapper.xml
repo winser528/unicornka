@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.CouponsDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Coupons">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="discount" jdbcType="DECIMAL" property="discount" />
+    <result column="is_use" jdbcType="BIT" property="isUse" />
+    <result column="is_open" jdbcType="BIT" property="isOpen" />
+    <result column="coupon" jdbcType="VARCHAR" property="coupon" />
+    <result column="ret" jdbcType="INTEGER" property="ret" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, discount, is_use, is_open, coupon, ret, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from coupons
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from coupons
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Coupons">
+    insert into coupons
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="isUse != null">
+        is_use,
+      </if>
+      <if test="isOpen != null">
+        is_open,
+      </if>
+      <if test="coupon != null">
+        coupon,
+      </if>
+      <if test="ret != null">
+        ret,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="isUse != null">
+        #{isUse,jdbcType=BIT},
+      </if>
+      <if test="isOpen != null">
+        #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="coupon != null">
+        #{coupon,jdbcType=VARCHAR},
+      </if>
+      <if test="ret != null">
+        #{ret,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Coupons">
+    update coupons
+    <set>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=DECIMAL},
+      </if>
+      <if test="isUse != null">
+        is_use = #{isUse,jdbcType=BIT},
+      </if>
+      <if test="isOpen != null">
+        is_open = #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="coupon != null">
+        coupon = #{coupon,jdbcType=VARCHAR},
+      </if>
+      <if test="ret != null">
+        ret = #{ret,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="discount != null and discount != ''">
+         and discount = #{discount,jdbcType=DECIMAL}
+      </if>
+      <if test="isUse != null and isUse != ''">
+         and is_use = #{isUse,jdbcType=BIT}
+      </if>
+      <if test="isOpen != null and isOpen != ''">
+         and is_open = #{isOpen,jdbcType=BIT}
+      </if>
+      <if test="coupon != null and coupon != ''">
+         and coupon = #{coupon,jdbcType=VARCHAR}
+      </if>
+      <if test="ret != null and ret != ''">
+         and ret = #{ret,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Coupons" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from coupons
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from coupons
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from coupons
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from coupons
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

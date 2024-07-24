@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='搜索订单')">
+<th:block th:fragment="contents">
+<!-- main start -->
+<style>
+    .layui-table td, .layui-table th {
+        padding: 9px 5px;
+    }
+</style>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box">
+                <div class="pay-title">
+                    <img th:src="@{/static/images/order.png}" alt="order" />
+                    订单查询
+                </div>
+                <div class="layui-card-body">
+                    <p style="color: #3C8CE7;font-size: 18px;font-weight: 700; text-align: center;margin: 20px 0">最多只能查询最近 5 笔订单</p>
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">订单号查询</li>
+                            <li>下单邮箱查询</li>
+                            <li>浏览器查询</li>
+                        </ul>
+                        <div class="layui-tab-content" style="text-align: center">
+                            <!-- 订单号查询 -->
+                            <div class="layui-tab-item layui-show">
+                                <form class="layui-form" action="/" method="post">
+                                    <div class="entry">
+                                        <span class="l-msg">订单编号:</span>
+                                        <label class="input">
+                                            <input type="text" name="order_sn" lay-verify="required" autocomplete="off" />
+                                        </label>
+                                    </div>
+                                    <div class="btn">
+                                        <button lay-submit lay-filter="orderByid">立即查询</button>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                            <!-- 邮箱查询 -->
+                            <div class="layui-tab-item">
+                                <form class="layui-form" action="/" method="post">
+                                    <div class="entry">
+                                        <span class="l-msg">下单邮箱:</span>
+                                        <label class="input">
+                                            <input type="email" name="email" lay-verify="required" autocomplete="off" />
+                                        </label>
+                                    </div>
+                                    <div class="entry" th:if="${is_open_search_pwd}">
+                                        <span class="l-msg">查询密码:</span>
+                                        <label class="input">
+                                            <input type="password" name="search_pwd" lay-verify="required" autocomplete="off" />
+                                        </label>
+                                    </div>
+                                    <div class="btn">
+                                        <button lay-submit lay-filter="orderByAccount">立即查询</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- 浏览器缓存 -->
+                            <div class="layui-tab-item">
+                                <form class="layui-form" action="/" method="post">
+                                    <div class="btn">
+                                        <button lay-submit lay-filter="searchOrderByBrowser">立即查询</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+layui.use(['element', 'form'], function (element, form) {
+    //监听提交
+    form.on('submit(orderByid)', function (data) {
+        return true;
+    });
+    //监听提交
+    form.on('submit(orderByAccount)', function (data) {
+        return true;
+    });
+    //监听提交
+    form.on('submit(searchOrderByBrowser)', function (data) {
+        return true;
+    });
+});
+</script>
+<!-- main end -->
+</th:block>
+</html>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.SysDeptDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.SysDept">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="PID" jdbcType="BIGINT" property="pid" />
+    <result column="PIDS" jdbcType="VARCHAR" property="pids" />
+    <result column="SIMPLE_NAME" jdbcType="VARCHAR" property="simpleName" />
+    <result column="FULL_NAME" jdbcType="VARCHAR" property="fullName" />
+    <result column="NOTES" jdbcType="VARCHAR" property="notes" />
+    <result column="LEVEL" jdbcType="INTEGER" property="level" />
+    <result column="VERSION" jdbcType="INTEGER" property="version" />
+    <result column="SORT" jdbcType="INTEGER" property="sort" />
+    <result column="CREATE_USER" jdbcType="BIGINT" property="createUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_USER" jdbcType="BIGINT" property="updateUser" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, PID, PIDS, SIMPLE_NAME, FULL_NAME, NOTES, `LEVEL`, VERSION, SORT, CREATE_USER, 
+    CREATE_TIME, UPDATE_USER, UPDATE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_dept
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from sys_dept
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.SysDept">
+    insert into sys_dept
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="pid != null">
+        PID,
+      </if>
+      <if test="pids != null">
+        PIDS,
+      </if>
+      <if test="simpleName != null">
+        SIMPLE_NAME,
+      </if>
+      <if test="fullName != null">
+        FULL_NAME,
+      </if>
+      <if test="notes != null">
+        NOTES,
+      </if>
+      <if test="level != null">
+        `LEVEL`,
+      </if>
+      <if test="version != null">
+        VERSION,
+      </if>
+      <if test="sort != null">
+        SORT,
+      </if>
+      <if test="createUser != null">
+        CREATE_USER,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="pids != null">
+        #{pids,jdbcType=VARCHAR},
+      </if>
+      <if test="simpleName != null">
+        #{simpleName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null">
+        #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.SysDept">
+    update sys_dept
+    <set>
+      <if test="pid != null">
+        PID = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="pids != null">
+        PIDS = #{pids,jdbcType=VARCHAR},
+      </if>
+      <if test="simpleName != null">
+        SIMPLE_NAME = #{simpleName,jdbcType=VARCHAR},
+      </if>
+      <if test="fullName != null">
+        FULL_NAME = #{fullName,jdbcType=VARCHAR},
+      </if>
+      <if test="notes != null">
+        NOTES = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        `LEVEL` = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="version != null">
+        VERSION = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        SORT = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="createUser != null">
+        CREATE_USER = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        UPDATE_USER = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="pid != null and pid != ''">
+         and PID = #{pid,jdbcType=BIGINT}
+      </if>
+      <if test="pids != null and pids != ''">
+         and PIDS = #{pids,jdbcType=VARCHAR}
+      </if>
+      <if test="simpleName != null and simpleName != ''">
+         and SIMPLE_NAME = #{simpleName,jdbcType=VARCHAR}
+      </if>
+      <if test="fullName != null and fullName != ''">
+         and FULL_NAME = #{fullName,jdbcType=VARCHAR}
+      </if>
+      <if test="notes != null and notes != ''">
+         and NOTES = #{notes,jdbcType=VARCHAR}
+      </if>
+      <if test="level != null and level != ''">
+         and `LEVEL` = #{level,jdbcType=INTEGER}
+      </if>
+      <if test="version != null and version != ''">
+         and VERSION = #{version,jdbcType=INTEGER}
+      </if>
+      <if test="sort != null and sort != ''">
+         and SORT = #{sort,jdbcType=INTEGER}
+      </if>
+      <if test="createUser != null and createUser != ''">
+         and CREATE_USER = #{createUser,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateUser != null and updateUser != ''">
+         and UPDATE_USER = #{updateUser,jdbcType=BIGINT}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.SysDept" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from sys_dept
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from sys_dept
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from sys_dept
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from sys_dept
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

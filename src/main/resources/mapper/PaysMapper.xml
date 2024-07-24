@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.PaysDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Pays">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="pay_name" jdbcType="VARCHAR" property="payName" />
+    <result column="pay_check" jdbcType="VARCHAR" property="payCheck" />
+    <result column="pay_client" jdbcType="INTEGER" property="payClient" />
+    <result column="pay_method" jdbcType="INTEGER" property="payMethod" />
+    <result column="merchant_account" jdbcType="VARCHAR" property="merchantAccount" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="merchant_key" jdbcType="VARCHAR" property="merchantKey" />
+    <result column="merchant_pem" jdbcType="VARCHAR" property="merchantPem" />
+    <result column="notify_url" jdbcType="VARCHAR" property="notifyUrl" />
+    <result column="return_url" jdbcType="VARCHAR" property="returnUrl" />
+    <result column="is_open" jdbcType="BIT" property="isOpen" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pay_name, pay_check, pay_client, pay_method, merchant_account, merchant_id, merchant_key, 
+    merchant_pem, notify_url, return_url, is_open, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from pays
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from pays
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Pays">
+    insert into pays
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="payName != null">
+        pay_name,
+      </if>
+      <if test="payCheck != null">
+        pay_check,
+      </if>
+      <if test="payClient != null">
+        pay_client,
+      </if>
+      <if test="payMethod != null">
+        pay_method,
+      </if>
+      <if test="merchantAccount != null">
+        merchant_account,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="merchantKey != null">
+        merchant_key,
+      </if>
+      <if test="merchantPem != null">
+        merchant_pem,
+      </if>
+      <if test="notifyUrl != null">
+        notify_url,
+      </if>
+      <if test="returnUrl != null">
+        return_url,
+      </if>
+      <if test="isOpen != null">
+        is_open,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="payName != null">
+        #{payName,jdbcType=VARCHAR},
+      </if>
+      <if test="payCheck != null">
+        #{payCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="payClient != null">
+        #{payClient,jdbcType=INTEGER},
+      </if>
+      <if test="payMethod != null">
+        #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="merchantAccount != null">
+        #{merchantAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantKey != null">
+        #{merchantKey,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantPem != null">
+        #{merchantPem,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyUrl != null">
+        #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="returnUrl != null">
+        #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null">
+        #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Pays">
+    update pays
+    <set>
+      <if test="payName != null">
+        pay_name = #{payName,jdbcType=VARCHAR},
+      </if>
+      <if test="payCheck != null">
+        pay_check = #{payCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="payClient != null">
+        pay_client = #{payClient,jdbcType=INTEGER},
+      </if>
+      <if test="payMethod != null">
+        pay_method = #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="merchantAccount != null">
+        merchant_account = #{merchantAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantKey != null">
+        merchant_key = #{merchantKey,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantPem != null">
+        merchant_pem = #{merchantPem,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyUrl != null">
+        notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="returnUrl != null">
+        return_url = #{returnUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null">
+        is_open = #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="payName != null and payName != ''">
+         and pay_name = #{payName,jdbcType=VARCHAR}
+      </if>
+      <if test="payCheck != null and payCheck != ''">
+         and pay_check = #{payCheck,jdbcType=VARCHAR}
+      </if>
+      <if test="payClient != null and payClient != ''">
+         and pay_client = #{payClient,jdbcType=INTEGER}
+      </if>
+      <if test="payMethod != null and payMethod != ''">
+         and pay_method = #{payMethod,jdbcType=INTEGER}
+      </if>
+      <if test="merchantAccount != null and merchantAccount != ''">
+         and merchant_account = #{merchantAccount,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantId != null and merchantId != ''">
+         and merchant_id = #{merchantId,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantKey != null and merchantKey != ''">
+         and merchant_key = #{merchantKey,jdbcType=VARCHAR}
+      </if>
+      <if test="merchantPem != null and merchantPem != ''">
+         and merchant_pem = #{merchantPem,jdbcType=VARCHAR}
+      </if>
+      <if test="notifyUrl != null and notifyUrl != ''">
+         and notify_url = #{notifyUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="returnUrl != null and returnUrl != ''">
+         and return_url = #{returnUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="isOpen != null and isOpen != ''">
+         and is_open = #{isOpen,jdbcType=BIT}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Pays" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from pays
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from pays
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from pays
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from pays
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

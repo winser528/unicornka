@@ -1,0 +1,82 @@
+#修改tomcat的默认的端口号，将8080改为80
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+  error:
+    whitelabel:
+      enabled: false
+
+spring:
+  profiles:
+    active: '@profiles.active@'
+  #数据库配置信息
+  datasource:
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      #testOnBorrow确保每次能获取到可用连接
+      test-while-idle: true
+      test-on-borrow: false
+      #如果为true（默认false），当应用使用完连接，连接池回收连接时会判断该连接是否还可用
+      test-on-return: false
+  #thymeleaf模板配置项
+  thymeleaf:
+    enabled: true
+    cache: false
+    encoding: UTF-8
+    mode: HTML
+    servlet:
+      content-type: text/html
+  mvc:
+    converters:
+      preferred-json-mapper: fastjson
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    format:
+      date: yyyy-MM-dd
+      time: HH:mm:ss
+      date-time: yyyy-MM-dd HH:mm:ss
+    #jsp模板配置
+    view:
+      prefix: classpath:/jsp/
+      suffix: .jsp
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  web:
+    resources:
+      static-locations: [ classpath:/static/ ]
+  messages:
+    encoding: UTF-8
+    # 文件上传
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+  devtools:
+    restart:
+      enabled: false
+      exclude: static/**,public/**,site/**,cache/**,head/**
+
+# mybatis配置
+mybatis:
+  configuration:
+    cache-enabled: true
+    use-generated-keys: true
+    default-executor-type: REUSE
+  type-aliases-package: com.fit.entity
+  mapper-locations: classpath:mapper/*.xml

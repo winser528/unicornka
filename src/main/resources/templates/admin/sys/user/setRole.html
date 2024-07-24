@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('角色角色')"/>
+<body class="layui-layout">
+    <div class="yadmin-body animated fadeIn">
+        <div class="layui-form layui-form-pane">
+            <input type="hidden" name="id" value="${userId}" />
+            <div class="layui-form-item" if="${role.pid}==0 ? false : true">
+                <label for="roleTree" class="layui-form-label"><span class="yadmin-red">*</span>上级名称</label>
+                <div class="layui-input-block">
+                    <ul id="roleTree" class="dtree" data-id="0" data-value="选择上级名称"></ul>
+                    <input type="hidden" name="roleId" value="${roleId}" id="roleId" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block layui-align">
+                    <button class="layui-btn layui-btn-normal btn-w100" lay-submit lay-filter="submit-form">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['form', 'dtree'], function (form, dtree) {
+            dtree.on("node('roleTree')", function (obj) {
+                let typeDom = layui.$('#roleId');
+                if (typeDom.val() === obj.param.nodeId) {
+                    typeDom.val('');
+                    layui.$("input[dtree-id='roleTree']").val('请选择');
+                } else {
+                    typeDom.val(obj.param.nodeId)
+                }
+            });
+
+            dtree.renderSelect({
+                elem: "#roleTree",
+                url: "/admin/role/tree",
+                dataStyle: "layuiStyle",
+                selectInitVal: 0,
+                width: "100%",
+                method: "post",
+                menubar: true,
+                dataFormat: "list",
+                ficon: ["1", "-1"],
+                done: function (data, obj, first) {
+                    if (first) {
+                        dtree.dataInit("roleTree", layui.$('#roleId').val());
+                        dtree.selectVal("roleTree");
+                    }
+                }
+            });
+
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/user/authRole', obj.field, true);
+            });
+        });
+    </script>
+</body>>
+</html>

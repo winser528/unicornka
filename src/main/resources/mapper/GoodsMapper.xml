@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fit.dao.GoodsDao">
+  <resultMap id="BaseResultMap" type="com.fit.entity.Goods">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="gd_name" jdbcType="VARCHAR" property="gdName" />
+    <result column="gd_description" jdbcType="VARCHAR" property="gdDescription" />
+    <result column="gd_keywords" jdbcType="VARCHAR" property="gdKeywords" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+    <result column="actual_price" jdbcType="DECIMAL" property="actualPrice" />
+    <result column="in_stock" jdbcType="INTEGER" property="inStock" />
+    <result column="sales_volume" jdbcType="INTEGER" property="salesVolume" />
+    <result column="ord" jdbcType="INTEGER" property="ord" />
+    <result column="buy_limit_num" jdbcType="INTEGER" property="buyLimitNum" />
+    <result column="buy_prompt" jdbcType="VARCHAR" property="buyPrompt" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="type" jdbcType="BIT" property="type" />
+    <result column="wholesale_price_cnf" jdbcType="VARCHAR" property="wholesalePriceCnf" />
+    <result column="other_ipu_cnf" jdbcType="VARCHAR" property="otherIpuCnf" />
+    <result column="api_hook" jdbcType="VARCHAR" property="apiHook" />
+    <result column="is_open" jdbcType="BIT" property="isOpen" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DELETE_TIME" jdbcType="TIMESTAMP" property="deleteTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, group_id, gd_name, gd_description, gd_keywords, picture, retail_price, actual_price, 
+    in_stock, sales_volume, ord, buy_limit_num, buy_prompt, description, `type`, wholesale_price_cnf, 
+    other_ipu_cnf, api_hook, is_open, CREATE_TIME, UPDATE_TIME, DELETE_TIME
+  </sql>
+  <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="save" parameterType="com.fit.entity.Goods">
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="gdName != null">
+        gd_name,
+      </if>
+      <if test="gdDescription != null">
+        gd_description,
+      </if>
+      <if test="gdKeywords != null">
+        gd_keywords,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="retailPrice != null">
+        retail_price,
+      </if>
+      <if test="actualPrice != null">
+        actual_price,
+      </if>
+      <if test="inStock != null">
+        in_stock,
+      </if>
+      <if test="salesVolume != null">
+        sales_volume,
+      </if>
+      <if test="ord != null">
+        ord,
+      </if>
+      <if test="buyLimitNum != null">
+        buy_limit_num,
+      </if>
+      <if test="buyPrompt != null">
+        buy_prompt,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="wholesalePriceCnf != null">
+        wholesale_price_cnf,
+      </if>
+      <if test="otherIpuCnf != null">
+        other_ipu_cnf,
+      </if>
+      <if test="apiHook != null">
+        api_hook,
+      </if>
+      <if test="isOpen != null">
+        is_open,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="gdName != null">
+        #{gdName,jdbcType=VARCHAR},
+      </if>
+      <if test="gdDescription != null">
+        #{gdDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="gdKeywords != null">
+        #{gdKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="retailPrice != null">
+        #{retailPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null">
+        #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inStock != null">
+        #{inStock,jdbcType=INTEGER},
+      </if>
+      <if test="salesVolume != null">
+        #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="ord != null">
+        #{ord,jdbcType=INTEGER},
+      </if>
+      <if test="buyLimitNum != null">
+        #{buyLimitNum,jdbcType=INTEGER},
+      </if>
+      <if test="buyPrompt != null">
+        #{buyPrompt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=BIT},
+      </if>
+      <if test="wholesalePriceCnf != null">
+        #{wholesalePriceCnf,jdbcType=VARCHAR},
+      </if>
+      <if test="otherIpuCnf != null">
+        #{otherIpuCnf,jdbcType=VARCHAR},
+      </if>
+      <if test="apiHook != null">
+        #{apiHook,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null">
+        #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.fit.entity.Goods">
+    update goods
+    <set>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="gdName != null">
+        gd_name = #{gdName,jdbcType=VARCHAR},
+      </if>
+      <if test="gdDescription != null">
+        gd_description = #{gdDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="gdKeywords != null">
+        gd_keywords = #{gdKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="retailPrice != null">
+        retail_price = #{retailPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPrice != null">
+        actual_price = #{actualPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="inStock != null">
+        in_stock = #{inStock,jdbcType=INTEGER},
+      </if>
+      <if test="salesVolume != null">
+        sales_volume = #{salesVolume,jdbcType=INTEGER},
+      </if>
+      <if test="ord != null">
+        ord = #{ord,jdbcType=INTEGER},
+      </if>
+      <if test="buyLimitNum != null">
+        buy_limit_num = #{buyLimitNum,jdbcType=INTEGER},
+      </if>
+      <if test="buyPrompt != null">
+        buy_prompt = #{buyPrompt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=BIT},
+      </if>
+      <if test="wholesalePriceCnf != null">
+        wholesale_price_cnf = #{wholesalePriceCnf,jdbcType=VARCHAR},
+      </if>
+      <if test="otherIpuCnf != null">
+        other_ipu_cnf = #{otherIpuCnf,jdbcType=VARCHAR},
+      </if>
+      <if test="apiHook != null">
+        api_hook = #{apiHook,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null">
+        is_open = #{isOpen,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleteTime != null">
+        DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <sql id="Base_Where_List">
+    <where>
+      <if test="groupId != null and groupId != ''">
+         and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="gdName != null and gdName != ''">
+         and gd_name = #{gdName,jdbcType=VARCHAR}
+      </if>
+      <if test="gdDescription != null and gdDescription != ''">
+         and gd_description = #{gdDescription,jdbcType=VARCHAR}
+      </if>
+      <if test="gdKeywords != null and gdKeywords != ''">
+         and gd_keywords = #{gdKeywords,jdbcType=VARCHAR}
+      </if>
+      <if test="picture != null and picture != ''">
+         and picture = #{picture,jdbcType=VARCHAR}
+      </if>
+      <if test="retailPrice != null and retailPrice != ''">
+         and retail_price = #{retailPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="actualPrice != null and actualPrice != ''">
+         and actual_price = #{actualPrice,jdbcType=DECIMAL}
+      </if>
+      <if test="inStock != null and inStock != ''">
+         and in_stock = #{inStock,jdbcType=INTEGER}
+      </if>
+      <if test="salesVolume != null and salesVolume != ''">
+         and sales_volume = #{salesVolume,jdbcType=INTEGER}
+      </if>
+      <if test="ord != null and ord != ''">
+         and ord = #{ord,jdbcType=INTEGER}
+      </if>
+      <if test="buyLimitNum != null and buyLimitNum != ''">
+         and buy_limit_num = #{buyLimitNum,jdbcType=INTEGER}
+      </if>
+      <if test="buyPrompt != null and buyPrompt != ''">
+         and buy_prompt = #{buyPrompt,jdbcType=VARCHAR}
+      </if>
+      <if test="description != null and description != ''">
+         and description = #{description,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null and type != ''">
+         and `type` = #{type,jdbcType=BIT}
+      </if>
+      <if test="wholesalePriceCnf != null and wholesalePriceCnf != ''">
+         and wholesale_price_cnf = #{wholesalePriceCnf,jdbcType=VARCHAR}
+      </if>
+      <if test="otherIpuCnf != null and otherIpuCnf != ''">
+         and other_ipu_cnf = #{otherIpuCnf,jdbcType=VARCHAR}
+      </if>
+      <if test="apiHook != null and apiHook != ''">
+         and api_hook = #{apiHook,jdbcType=VARCHAR}
+      </if>
+      <if test="isOpen != null and isOpen != ''">
+         and is_open = #{isOpen,jdbcType=BIT}
+      </if>
+      <if test="createTime != null and createTime != ''">
+         and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateTime != null and updateTime != ''">
+         and UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="deleteTime != null and deleteTime != ''">
+         and DELETE_TIME = #{deleteTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </sql>
+  <select id="findList" parameterType="com.fit.entity.Goods" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from goods
+    <include refid="Base_Where_List" />
+    order by id desc 
+	<if test="offset != null and limit != null">
+	limit ${offset}, ${limit}
+	</if>
+  </select>
+  <select id="findCount" resultType="java.lang.Integer">
+    select count(1) from goods
+    <include refid="Base_Where_List" />
+  </select>
+  <select id="get" parameterType="java.util.Map" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+     from goods
+     <include refid="Base_Where_List" />
+  </select>
+  <delete id="batchDelete">
+    delete from goods
+     where id in (
+     <foreach collection="array" item="id" separator=",">
+     #{id}
+     </foreach>
+    )
+  </delete>
+</mapper>

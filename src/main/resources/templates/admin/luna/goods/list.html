@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('商品列表')"/>
+<body class="layui-layout">
+    <div class="layui-fluid layui-col-space15">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <form class="layui-form yadmin-search-area input">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label for="simpleName" class="layui-form-label">关键字</label>
+                            <div class="layui-input-inline">
+                                <input type="hidden" name="pid" value=""/>
+                                <input type="text" name="simpleName" autocomplete="off" placeholder="输入简称" id="simpleName" class="layui-input" />
+                            </div>
+                            <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                                <i class="layui-icon layui-icon-search"></i>
+                            </button>
+                            <button type="reset" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                                <i class="layui-icon layui-icon-refresh"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <script type="text/html" id="toolbar">
+                    <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="add">
+                        <i class="layui-icon layui-icon-addition">新增</i>
+                    </button>
+                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                        <i class="layui-icon layui-icon-delete" title="删除">删除</i>
+                    </button>
+                </script>
+                <table class="layui-hide" id="table-list"></table>
+                <script type="text/html" id="column-toolbar">
+                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+                        <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
+                    </button>
+                </script>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['table', 'form'], function (table, form) {
+            table.render({
+                elem: '#table-list',
+                url: '/admin/goods/list',
+                method: 'post',
+                dataType: 'JSON',
+                page: true,
+                toolbar: '#toolbar',
+                smartReloadModel: true,
+                cols: [
+                    [
+                        {type: 'checkbox'},
+                        {field: 'gdName', title: '商品名称', minWidth: 120},
+                        {field: 'gdDescription', title: '商品描述', minWidth: 120},
+                        {field: 'gdKeywords', title: '商品关键字', minWidth: 120},
+                        {field: 'retailPrice', title: '零售价', width: 90},
+                        {field: 'actualPrice', title: '实际售价', width: 90},
+                        {field: 'inStock', title: '库存', width: 90},
+                        {field: 'ord', title: '排序', align: 'center', width: 60},
+                        {field: 'type', title: '商品类型', align: 'center', width: 90,templet: function (res) {
+                            return res.type == "1"?"自动发货":"人工处理";
+                        }},
+                        { field: 'isOpen', title: '启用状态', align: 'center', width: 90, templet: function (res) {
+                            return res.isOpen == "1"?"是":"否";
+                        }},
+                        {fixed: 'right', title: '操作', align: 'center', width: 90, toolbar: '#column-toolbar'}
+                    ]
+                ]
+            });
+            // 工具条点击事件
+            table.on('toolbar', function (obj) {
+                if (obj.event === 'add') {
+                    editView("/admin/goods/edit", "新增优惠");
+                } else if (obj.event === 'del') {
+                    layer.confirm('真的删除行么?', function (index) {
+                        let selectData = table.checkStatus('table-list').data;
+                        if (selectData.length > 0) {
+                            let idsArray = [];
+                            for (let i = 0; i < selectData.length; i++) {
+                                idsArray.push(selectData[i].id);
+                            }
+                            let ids = idsArray.toString();
+                            changeReq(ids, '/admin/goods/del')
+                            layer.close(index);
+                        }
+                    });
+                }
+            });
+            // 行点击事件
+            table.on('tool', function (obj) {
+                let data = obj.data, event = obj.event;
+                if (event === 'edit') {
+                    editView("/admin/goods/edit?id=" + data.id, "编辑优惠");
+                }
+            });
+
+            form.on('submit(search)', function (form) {
+                table.reload('table-list', {
+                    where: form.field
+                });
+                return false;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑用户')"/>
+<body class="yadmin-body animated fadeIn layui-card">
+    <div class="layui-form layui-form-pane">
+        <input type="hidden" name="id" th:value="${user?.id}" />
+        <div class="layui-form-item">
+            <label for="deptTree" class="layui-form-label"><span class="yadmin-red">*</span>部门</label>
+            <div class="layui-input-block">
+                <ul id="deptTree" class="dtree" data-id="0" data-value="请选择"></ul>
+                <input type="hidden" id="deptId" name="deptId" lay-verify="required" th:value="${user?.deptId}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="name" class="layui-form-label"><span class="yadmin-red">*</span>用户名</label>
+            <div class="layui-input-block">
+                <input type="text" id="name" placeholder="请输入用户名" name="name" th:value="${user?.name}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="phone" class="layui-form-label"><span class="yadmin-red">*</span>电话号码</label>
+            <div class="layui-input-block">
+                <input type="text" id="phone" placeholder="请输入电话号码" name="phone" th:value="${user?.phone}" maxlength="11" lay-verify="required|phone" lay-vertype="tips" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" th:if="${user} ? false : true">
+            <label for="username" class="layui-form-label"><span class="yadmin-red">*</span>账号名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="username" placeholder="请输入账号名" name="username" th:value="${user?.username}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <!-- 编辑时不显示密码框 -->
+        <div class="layui-form-item" th:if="${user} ? false : true">
+            <label for="password" class="layui-form-label"><span class="yadmin-red">*</span>用户密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="password" name="password" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="email" class="layui-form-label"><span class="yadmin-red">*</span>邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" id="email" placeholder="请输入邮箱" name="email" th:value="${user?.email}" lay-verify="required|email" lay-vertype="tips" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="sex" class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <select id="sex" name="sex" class="layui-input" lay-verify="required" lay-vertype="tips">
+                    <option>请选择</option>
+                    <option value="0" th:selected="${user?.sex eq 0}">女</option>
+                    <option value="1" th:selected="${user?.sex eq 1}">男</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="birthday" class="layui-form-label">出生日期</label>
+            <div class="layui-input-block">
+                <input type="text" id="birthday" name="birthday" th:value="${user?.birthday}" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" id="enabled" name="enabled" value="true" title="正常" />
+                <input type="radio" name="enabled" value="false" title="冻结" checked />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="notes" class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <input type="text" id="notes" placeholder="说点什么..." name="notes" th:value="${user?.notes}" autocomplete="off" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block layui-align">
+                <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['jquery', 'form', 'dtree', 'laydate'], function ($, form, dtree, laydate) {
+            laydate.render({
+                elem: '#birthday', type: 'date', format: 'yyyy-MM-dd'
+            });
+
+            dtree.on("node('deptTree')", function (obj) {
+                let typeDom = $('#deptId');
+                if (typeDom.val() === obj.param.nodeId) {
+                    typeDom.val('');
+                    $("input[dtree-id='deptTree']").val('请选择');
+                } else {
+                    typeDom.val(obj.param.nodeId)
+                }
+            });
+
+            var depTree = dtree.renderSelect({
+                elem: "#deptTree",
+                url: "/admin/dept/tree",
+                dataStyle: "layuiStyle",
+                selectInitVal: 1,
+                width: "100%",
+                method: "post",
+                dataFormat: "list",
+                ficon: ["1", "-1"],
+                done: function (data, obj, first) {
+                    if (first) {
+                        dtree.dataInit("deptTree", $('#deptId').val());
+                        dtree.selectVal("deptTree");
+                    }
+                    $('input:radio[name=enabled][value="[[${user?.enabled}]]"]').prop("checked", true);
+                    form.render('radio');
+                }
+            });
+
+            form.on('submit(submit-form)', function (obj) {
+                if(depTree.getNowParam().nodeId== "0") {
+                    layer.msg("请选择一个部门！", {icon: 5});
+                    return false;
+                }
+                modifyReq('/admin/user/save', obj.field, true);
+            });
+        });
+    </script>
+</body>
+</html>

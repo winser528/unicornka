@@ -1,0 +1,79 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title th:text="${title}">layui application</title>
+    <link th:href="@{/favicon.ico}" rel="shortcut icon" type="image/x-icon">
+    <link th:href="@{/static/luna/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/static/luna/main.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/static/luna/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/static/luna/main.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="background">
+<!-- header start -->
+<div class="header" style="">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="header-box">
+                <a href="/">
+                    <img th:src="@{/static/images/logp.png}" alt="Logo" />
+                    <div class="info">系统名</div>
+                </a>
+                <div class="query layui-hide-xs">
+                    <a href="/order_search">
+                        <img style="padding-left: 18px;" th:src="@{/static/images/search.png}" alt="search" />
+                        <span>订单查询</span>
+                    </a>
+                </div>
+                <div class="main layui-hide-xs">
+                    <div class="layui-col-sm12">
+                        <div class="main-box">
+                            <div class="title">
+                                <p class="tit">公告:</p>
+                            </div>
+                            <div class="goods">
+                                <div class="tips">公告内容</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main layui-hide-sm layui-show-xs">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box">
+                <div class="title"><p class="tit">公告:</p></div>
+                <div class="goods"><div class="tips">公告内容</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- header end -->
+<th:block th:include="::contents">
+
+</th:block>
+<!-- footer start-->
+<div class="footer">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div style="text-align: center"></div>
+            <p>Powered by <a href="#" target="_blank">@独角数卡.DJK</a></p>
+        </div>
+    </div>
+</div>
+<!-- footer end-->
+</body>
+</html>
