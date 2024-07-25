@@ -32,7 +32,7 @@
     delete from pays
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Pays">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Pays" useGeneratedKeys="true">
     insert into pays
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

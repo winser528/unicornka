@@ -9,7 +9,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="type" jdbcType="BIT" property="type" />
     <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice" />
-    <result column="buy_amount" jdbcType="INTEGER" property="buyAmount" />
+    <result column="buy_amount" jdbcType="DECIMAL" property="buyAmount" />
     <result column="coupon_discount_price" jdbcType="DECIMAL" property="couponDiscountPrice" />
     <result column="wholesale_discount_price" jdbcType="DECIMAL" property="wholesaleDiscountPrice" />
     <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
@@ -41,7 +41,7 @@
     delete from orders
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Orders">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Orders" useGeneratedKeys="true">
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -137,7 +137,7 @@
         #{goodsPrice,jdbcType=DECIMAL},
       </if>
       <if test="buyAmount != null">
-        #{buyAmount,jdbcType=INTEGER},
+        #{buyAmount,jdbcType=DECIMAL},
       </if>
       <if test="couponDiscountPrice != null">
         #{couponDiscountPrice,jdbcType=DECIMAL},
@@ -170,7 +170,7 @@
         #{tradeNo,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=BIT},
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="couponRetBack != null">
         #{couponRetBack,jdbcType=BIT},
@@ -208,7 +208,7 @@
         goods_price = #{goodsPrice,jdbcType=DECIMAL},
       </if>
       <if test="buyAmount != null">
-        buy_amount = #{buyAmount,jdbcType=INTEGER},
+        buy_amount = #{buyAmount,jdbcType=DECIMAL},
       </if>
       <if test="couponDiscountPrice != null">
         coupon_discount_price = #{couponDiscountPrice,jdbcType=DECIMAL},
@@ -241,7 +241,7 @@
         trade_no = #{tradeNo,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        `status` = #{status,jdbcType=BIT},
+        `status` = #{status,jdbcType=INTEGER},
       </if>
       <if test="couponRetBack != null">
         coupon_ret_back = #{couponRetBack,jdbcType=BIT},
@@ -279,7 +279,7 @@
          and goods_price = #{goodsPrice,jdbcType=DECIMAL}
       </if>
       <if test="buyAmount != null and buyAmount != ''">
-         and buy_amount = #{buyAmount,jdbcType=INTEGER}
+         and buy_amount = #{buyAmount,jdbcType=DECIMAL}
       </if>
       <if test="couponDiscountPrice != null and couponDiscountPrice != ''">
          and coupon_discount_price = #{couponDiscountPrice,jdbcType=DECIMAL}
@@ -312,7 +312,7 @@
          and trade_no = #{tradeNo,jdbcType=VARCHAR}
       </if>
       <if test="status != null and status != ''">
-         and `status` = #{status,jdbcType=BIT}
+         and `status` = #{status,jdbcType=INTEGER}
       </if>
       <if test="couponRetBack != null and couponRetBack != ''">
          and coupon_ret_back = #{couponRetBack,jdbcType=BIT}

@@ -34,7 +34,7 @@
     delete from sys_user
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.SysUser">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.SysUser" useGeneratedKeys="true">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

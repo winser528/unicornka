@@ -25,7 +25,7 @@
     delete from carmis
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Carmis">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Carmis" useGeneratedKeys="true">
     insert into carmis
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

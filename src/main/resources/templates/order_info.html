@@ -1,91 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='搜索订单')">
 <th:block th:fragment="contents">
-<!-- main start -->
-<style>
-    .layui-table td, .layui-table th {
-        padding: 9px 5px;
-    }
-</style>
-<div class="main">
-    <div class="layui-row">
-        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
-            <div class="main-box">
-                <div class="pay-title">
-                    <img th:src="@{/static/images/order.png}" alt="order" />
-                    订单详情
-                </div>
-                <div th:if="${not #lists.isEmpty(orders)}" class="layui-card-body info-box" th:each="order: ${orders}">
-                    <div class="layui-row order-list">
-                        <div class="layui-col-md4">
-                            <ul class="info-ui">
-                                <li>
-                                    <strong>订单编号:</strong>
-                                    <span class="span-tips" th:text="${order.orderSn}"></span>
-                                </li>
-                                <li>
-                                    <strong>订单名称:</strong>
-                                    <span class="span-tips" th:text="${order.title}"></span>
-                                </li>
-                                <li>
-                                    <strong>购买数量:</strong>
-                                    <span class="span-tips" th:text="${order.buyAmount}"></span>
-                                </li>
-                                <li>
-                                    <strong>创建时间:</strong>
-                                    <span class="span-tips" th:text="${#dates.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
-                                </li>
-                                <li>
-                                    <strong>下单邮箱:</strong>
-                                    <span class="span-tips" th:text="${order.email}"></span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="layui-col-md4">
-                            <ul class="info-ui">
-                                <li>
-                                    <strong>订单类型:</strong>
-                                    <span class="small-tips tips-green" th:text="${order.type==1?'自动发货':'人工处理'}" />
-                                </li>
-                                <li>
-                                    <strong>实际支付价格:</strong>
-                                    <span class="small-tips tips-green" th:text="'￥'+${order.actualPrice}" />
-                                </li>
-                                <li th:switch="${order.status}"><strong>订单状态:</strong>
-                                    <span th:case="-1" class="small-tips tips-cyan">已过期</span>
-                                    <span th:case="1" class="small-tips tips-blue">待支付</span>
-                                    <span th:case="2" class="small-tips tips-green">待处理</span>
-                                    <span th:case="3" class="small-tips tips-green">处理中</span>
-                                    <span th:case="4" class="small-tips tips-green">已完成</span>
-                                    <span th:case="5" class="small-tips tips-black">失败</span>
-                                    <span th:case="6" class="small-tips tips-black">异常</span>
-                                </li>
-                                <li>
-                                    <strong>支付方式:</strong>
-                                    <span class="span-tips" th:text="${pays[order?.payId]?.payName}"></span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="layui-col-md4">
-                            <textarea disabled spellcheck="false" class="order-info" th:text="${order.info}"></textarea>
-                            <div class="btn" style="width: 100%">
-                                <button class="clipboard-but" type="button" data-clipboard-text="{{ $info }}"
-                                        style="width: 100%;margin-top: initial;margin-bottom: 10px">复制</button>
+    <!-- main start -->
+    <style>
+        .layui-table td, .layui-table th {
+            padding: 9px 5px;
+        }
+    </style>
+    <div class="main">
+        <div class="layui-row">
+            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+                <div class="main-box">
+                    <div class="pay-title">
+                        <img th:src="@{/static/images/order.png}" alt="order" />
+                        订单详情
+                    </div>
+                    <div th:if="${not #lists.isEmpty(orders)}" class="layui-card-body info-box" th:each="order: ${orders}">
+                        <div class="layui-row order-list">
+                            <div class="layui-col-md4">
+                                <ul class="info-ui">
+                                    <li>
+                                        <strong>订单编号:</strong>
+                                        <span class="span-tips" th:text="${order.orderSn}"></span>
+                                    </li>
+                                    <li>
+                                        <strong>订单名称:</strong>
+                                        <span class="span-tips" th:text="${order.title}"></span>
+                                    </li>
+                                    <li>
+                                        <strong>购买数量:</strong>
+                                        <span class="span-tips" th:text="${order.buyAmount}"></span>
+                                    </li>
+                                    <li>
+                                        <strong>创建时间:</strong>
+                                        <span class="span-tips" th:text="${#dates.format(order.createTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    </li>
+                                    <li>
+                                        <strong>下单邮箱:</strong>
+                                        <span class="span-tips" th:text="${order.email}"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="layui-col-md4">
+                                <ul class="info-ui">
+                                    <li>
+                                        <strong>订单类型:</strong>
+                                        <span class="small-tips tips-green" th:text="${order.type==1?'自动发货':'人工处理'}" />
+                                    </li>
+                                    <li>
+                                        <strong>实际支付价格:</strong>
+                                        <span class="small-tips tips-green" th:text="'￥'+${order.actualPrice}" />
+                                    </li>
+                                    <li th:switch="${order.status}"><strong>订单状态:</strong>
+                                        <span th:case="-1" class="small-tips tips-cyan">已过期</span>
+                                        <span th:case="1" class="small-tips tips-blue">待支付</span>
+                                        <span th:case="2" class="small-tips tips-green">待处理</span>
+                                        <span th:case="3" class="small-tips tips-green">处理中</span>
+                                        <span th:case="4" class="small-tips tips-green">已完成</span>
+                                        <span th:case="5" class="small-tips tips-black">失败</span>
+                                        <span th:case="6" class="small-tips tips-black">异常</span>
+                                    </li>
+                                    <li>
+                                        <strong>支付方式:</strong>
+                                        <span class="span-tips" th:text="${pays.get(order?.payId.toString())}"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="layui-col-md4">
+                                <textarea disabled spellcheck="false" class="order-info" th:text="${order?.info}"></textarea>
+                                <div class="btn" style="width: 100%">
+                                    <button class="clipboard-but" type="button" data-clipboard-text="{{ $info }}"
+                                            style="width: 100%;margin-top: initial;margin-bottom: 10px">复制</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div th:if="${#lists.isEmpty(orders)}" style="text-align: center">
-                    <img th:src="@{/static/images/nofound.png}" alt="nofound" />
-                    <div class="err_title">没有找到订单信息。</div>
-                    <div class="err_content">或许可以检查核对下输入的订单号，邮箱，或者查询密码是否正确哦！！</div>
-                    <div class="btn"><a href="javascript:history.back(-1);"><span>返回</span></a></div>
+                    <div th:if="${#lists.isEmpty(orders)}" style="text-align: center">
+                        <img th:src="@{/static/images/nofound.png}" alt="nofound" />
+                        <div class="err_title">没有找到订单信息。</div>
+                        <div class="err_content">或许可以检查核对下输入的订单号，邮箱，或者查询密码是否正确哦！！</div>
+                        <div class="btn"><a href="javascript:history.back(-1);"><span>返回</span></a></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- main end -->
+    <!-- main end -->
 </th:block>
 </html>

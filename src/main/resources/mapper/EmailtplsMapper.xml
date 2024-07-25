@@ -23,7 +23,7 @@
     delete from emailtpls
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Emailtpls">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Emailtpls" useGeneratedKeys="true">
     insert into emailtpls
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

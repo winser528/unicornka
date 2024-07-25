@@ -48,8 +48,9 @@
         }).click(function () {
             $('.pay-type').removeClass('pay-select')
             $(this).toggleClass("pay-select");
-            $('input[name=payway]').val($(this).data('id'));
+            $('input[name=payId]').val($(this).data('id'));
         });
+        $('input[name=payId]').val($('.pay-type.pay-select').data('id'));
 
         //加减商品数量
         let orderNumber = 1, numDoc = $("#orderNumber");

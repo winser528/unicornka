@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @AUTO
  * @Author AIM
- * @DATE 2024/07/18
+ * @DATE 2024/07/25
  */
 @Data
 @Builder
@@ -33,14 +33,14 @@ public class Orders extends BaseEntity<Orders> {
     /** 订单名称 (无默认值) */
     private String title;
 
-    /** 订单类型 1自动发货 2人工处理  (默认值为: 1) */
+    /** 订单类型: 1-自动发货 2-人工处理  (默认值为: 1) */
     private Boolean type;
 
     /** 商品单价  (默认值为: 0.00) */
     private BigDecimal goodsPrice;
 
     /** 购买数量  (默认值为: 1) */
-    private Integer buyAmount;
+    private BigDecimal buyAmount;
 
     /** 优惠码优惠价格  (默认值为: 0.00) */
     private BigDecimal couponDiscountPrice;

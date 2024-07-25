@@ -32,7 +32,7 @@
     delete from sys_menu
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.SysMenu">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.SysMenu" useGeneratedKeys="true">
     insert into sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

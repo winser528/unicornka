@@ -30,7 +30,7 @@
     delete from sys_dept
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.SysDept">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.SysDept" useGeneratedKeys="true">
     insert into sys_dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

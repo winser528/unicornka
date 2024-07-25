@@ -25,7 +25,7 @@
     delete from coupons
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Coupons">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Coupons" useGeneratedKeys="true">
     insert into coupons
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

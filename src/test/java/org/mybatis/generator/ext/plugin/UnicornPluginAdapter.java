@@ -351,6 +351,10 @@ public class UnicornPluginAdapter extends PluginAdapter {
             }
         }
         element.addAttribute(new Attribute("id", "save"));
+        // 添加 useGeneratedKeys 属性
+        element.addAttribute(new Attribute("useGeneratedKeys", "true"));
+        // 添加 keyProperty 属性，它应该与你的模型类中的主键属性名称相匹配
+        element.addAttribute(new Attribute("keyProperty", "id"));
         Collections.reverse(attributes);
         return true;
     }

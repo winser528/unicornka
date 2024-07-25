@@ -112,4 +112,9 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
     }
+
+    @Bean
+    public SnowFlake snowflakeIdWorker() {
+        return new SnowFlake(1, 1);
+    }
 }

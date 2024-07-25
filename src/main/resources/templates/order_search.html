@@ -26,27 +26,25 @@
                         <div class="layui-tab-content" style="text-align: center">
                             <!-- 订单号查询 -->
                             <div class="layui-tab-item layui-show">
-                                <form class="layui-form" action="/" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="post">
                                     <div class="entry">
                                         <span class="l-msg">订单编号:</span>
                                         <label class="input">
-                                            <input type="text" name="order_sn" lay-verify="required" autocomplete="off" />
+                                            <input type="text" name="orderSn" lay-verify="required" />
                                         </label>
                                     </div>
                                     <div class="btn">
                                         <button lay-submit lay-filter="orderByid">立即查询</button>
                                     </div>
                                 </form>
-
                             </div>
-
                             <!-- 邮箱查询 -->
                             <div class="layui-tab-item">
-                                <form class="layui-form" action="/" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="post">
                                     <div class="entry">
                                         <span class="l-msg">下单邮箱:</span>
                                         <label class="input">
-                                            <input type="email" name="email" lay-verify="required" autocomplete="off" />
+                                            <input type="email" name="email" lay-verify="required" />
                                         </label>
                                     </div>
                                     <div class="entry" th:if="${is_open_search_pwd}">
@@ -63,7 +61,7 @@
 
                             <!-- 浏览器缓存 -->
                             <div class="layui-tab-item">
-                                <form class="layui-form" action="/" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="post">
                                     <div class="btn">
                                         <button lay-submit lay-filter="searchOrderByBrowser">立即查询</button>
                                     </div>

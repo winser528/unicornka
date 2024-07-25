@@ -40,7 +40,7 @@
     delete from goods
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.Goods">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.Goods" useGeneratedKeys="true">
     insert into goods
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

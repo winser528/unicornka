@@ -26,7 +26,7 @@
     delete from sys_role
     where ID = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="save" parameterType="com.fit.entity.SysRole">
+  <insert id="save" keyProperty="id" parameterType="com.fit.entity.SysRole" useGeneratedKeys="true">
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

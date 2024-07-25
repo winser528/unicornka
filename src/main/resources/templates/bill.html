@@ -12,7 +12,7 @@
             <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
                 <div class="main-box">
                     <div class="pay-title">
-                        <img th:src="@{/static/images/order.png}" alt="order" />
+                        <img th:src="@{/static/images/order.png}" alt="order"/>
                         确认订单
                     </div>
 
@@ -40,27 +40,37 @@
                             </tr>
                             <tr>
                                 <td style="text-align: right">商品单价：</td>
-                                <td><span class="small-tips tips-green noML" th:text="'￥'+${order?.goodsPrice}"></span></td>
+                                <td><span class="small-tips tips-green noML" th:text="'￥'+${order?.goodsPrice}"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="text-align: right">购买数量：</td>
-                                <td><span class="small-tips tips-green noML" th:text="'x '+${order?.buyAmount}"></span></td>
+                                <td><span class="small-tips tips-green noML" th:text="'x '+${order?.buyAmount}"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="text-align: right">优惠码：</td>
-                                <td><span class="small-tips tips-green noML" th:text="${coupon?.coupon}"></span></td>
+                                <td>
+                                    <span class="small-tips tips-green noML" th:text="${coupon?:''}"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="text-align: right">优惠码优惠价格：</td>
-                                <td><span class="small-tips tips-green noML" th:text="'￥'+${order?.couponDiscountPrice}"></span></td>
+                                <td>
+                                    <span class="small-tips tips-green noML" th:text="'￥'+${order?.couponDiscountPrice}"></span>
+                                </td>
                             </tr>
                             <tr th:if="${order?.wholesaleDiscountPrice>0}">
                                 <td style="text-align: right">批发价优惠：</td>
-                                <td><span class="small-tips tips-green noML" th:text="'￥'+${order?.wholesaleDiscountPrice}"></span></td>
+                                <td>
+                                    <span class="small-tips tips-green noML" th:text="'￥'+${order?.wholesaleDiscountPrice}"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="text-align: right">实际支付价格：</td>
-                                <td><span class="small-tips tips-green noML" th:text="'￥'+${order?.actualPrice}"> ￥{{ $actual_price }}</span></td>
+                                <td>
+                                    <span class="small-tips tips-green noML" th:text="'￥'+${order?.actualPrice}"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="text-align: right">邮箱：</td>
@@ -72,12 +82,12 @@
                             </tr>
                             <tr>
                                 <td style="text-align: right">支付方式：</td>
-                                <td th:text="${pay?.payName}"></td>
+                                <td th:text="${payName}"></td>
                             </tr>
                             </tbody>
                         </table>
                         <p class="btn" style="text-align: center">
-                            <a href="">立即支付</a>
+                            <a th:href="'/qrpay/'+${order?.id}">立即支付</a>
                         </p>
                     </div>
                 </div>
