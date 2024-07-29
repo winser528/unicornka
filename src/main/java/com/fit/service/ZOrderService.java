@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.beans.Transient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,19 @@ public class ZOrderService {
             map.put(pay.getId().toString(), pay.getPayName());
         }
         return map;
+    }
+
+    public List<Map<String, Object>> getListPays() {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        List<Pays> pays1 = this.payService.findList(new Pays());
+        for (Pays pay : pays1) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", pay.getId());
+            map.put("payName", pay.getPayName());
+            map.put("payCheck", pay.getPayCheck());
+            list.add(map);
+        }
+        return list;
     }
 
     public Pays getPayById(Long id) {

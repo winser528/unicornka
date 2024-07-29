@@ -30,7 +30,7 @@
                         <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                     </button>
                 </script>
-                <table class="layui-hide" id="table-list"></table>
+                <table class="layui-hide" id="table-email"></table>
                 <script type="text/html" id="column-toolbar">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
                         <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
@@ -42,7 +42,7 @@
     <script>
         layui.use(['table', 'dtree', 'form', 'tablePlug'], function (table, dtree, form, tablePlug) {
             table.render({
-                elem: '#table-list',
+                elem: '#table-email',
                 url: '/admin/emailtpl/list',
                 method: 'post',
                 dataType: 'JSON',
@@ -64,18 +64,7 @@
                 if (obj.event === 'add') {
                     editView("/admin/emailtpl/edit", "新增卡密");
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除行么?', function (index) {
-                        let selectData = table.checkStatus('table-list').data;
-                        if (selectData.length > 0) {
-                            let idsArray = [];
-                            for (let i = 0; i < selectData.length; i++) {
-                                idsArray.push(selectData[i].id);
-                            }
-                            let ids = idsArray.toString();
-                            changeReq(ids, '/admin/carmis/del')
-                            layer.close(index);
-                        }
-                    });
+                    changeDel('/admin/emailtpl/del', 'table-email');
                 }
             });
             // 行点击事件
@@ -87,7 +76,7 @@
             });
             tablePlug.smartReload.enable(true);
             form.on('submit(search)', function (form) {
-                table.reload('table-list', {
+                table.reload('table-email', {
                     where: form.field
                 });
                 return false;

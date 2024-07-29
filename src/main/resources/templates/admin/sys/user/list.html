@@ -43,7 +43,7 @@
                         <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                     </button>
                 </script>
-                <table class="layui-hide" id="table-list"></table>
+                <table class="layui-hide" id="table-user"></table>
                 <script type="text/html" id="column-toolbar">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="info">
                         <i class="layui-icon layui-icon-edit" title="查看用户">查看</i>
@@ -77,7 +77,7 @@
         });
 
         dtree.on("node('deptTree')", function (obj) {
-            table.reload('table-list', {
+            table.reload('table-user', {
                 where: {
                     deptId: obj.param.nodeId
                 }
@@ -85,7 +85,7 @@
         });
         tablePlug.smartReload.enable(true);
         table.render({
-            elem: '#table-list',
+            elem: '#table-user',
             url: '/admin/user/list',
             method: 'post',
             dataType: 'JSON',
@@ -121,18 +121,7 @@
             if (obj.event === 'add') {
                 editView("/admin/user/edit", '添加用户');
             } else if (obj.event === 'del') {
-                layer.confirm('真的删除行么?', function (index) {
-                    let selectData = table.checkStatus('table-list').data;
-                    if (selectData.length > 0) {
-                        let idsArray = [];
-                        for (let i = 0; i < selectData.length; i++) {
-                            idsArray.push(selectData[i].userId);
-                        }
-                        let ids = idsArray.toString();
-                        changeReq(ids, '${ctx}/admin/user/del')
-                        layer.close(index);
-                    }
-                });
+                changeDel('/admin/user/del', 'table-user');
             }
         });
 
@@ -152,11 +141,11 @@
 
         // 账号状态(正常/锁定)点击事件
         form.on('switch(status)', function (obj) {
-            modifyReq('/admin/user/setState', {userId: obj.value}, false);
+            modifyReq('/admin/user/setState', {userId: obj.value}, 'table-user');
         });
 
         form.on('submit(search)', function (form) {
-            table.reload('table-list', {
+            table.reload('table-user', {
                 where: form.field
             });
             return false;

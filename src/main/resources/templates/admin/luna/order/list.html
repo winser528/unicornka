@@ -27,7 +27,7 @@
                     <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                 </button>
             </script>
-            <table class="layui-hide" id="table-list"></table>
+            <table class="layui-hide" id="table-order"></table>
             <script type="text/html" id="column-toolbar">
                 <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
                     <i class="layui-icon layui-icon-edit" title="查看">查看</i>
@@ -41,7 +41,7 @@
         var states = {"-1": "过期", "1": "待支付", "2": "待处理", "3": "处理中", "4": "已完成", "5": "处理失败", "6": "异常"};
         var pays1 = JSON.parse(layui.$("#pays1").attr("date-text"));
         table.render({
-            elem: '#table-list',
+            elem: '#table-order',
             url: '/admin/order/list',
             method: 'post',
             dataType: 'JSON',
@@ -76,18 +76,7 @@
         // 工具条点击事件
         table.on('toolbar', function (obj) {
             if (obj.event === 'del') {
-                layer.confirm('真的删除行么?', function (index) {
-                    let selectData = table.checkStatus('table-list').data;
-                    if (selectData.length > 0) {
-                        let idsArray = [];
-                        for (let i = 0; i < selectData.length; i++) {
-                            idsArray.push(selectData[i].id);
-                        }
-                        let ids = idsArray.toString();
-                        changeReq(ids, '/admin/order/del')
-                        layer.close(index);
-                    }
-                });
+                changeDel('/admin/order/del', 'table-order');
             }
         });
         // 行点击事件
@@ -99,7 +88,7 @@
         });
         tablePlug.smartReload.enable(true);
         form.on('submit(search)', function (form) {
-            table.reload('table-list', {
+            table.reload('table-order', {
                 where: form.field
             });
             return false;

@@ -27,7 +27,7 @@
                         <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                     </button>
                 </script>
-                <table class="layui-hide" id="table-list"></table>
+                <table class="layui-hide" id="table-role"></table>
                 <script type="text/html" id="statusTpl">
                     <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="status" {{ d.enabled==true?"checked":"" }}>
                 </script>
@@ -46,7 +46,7 @@
         layui.use(['table', 'form', 'tablePlug'], function (table, form, tablePlug) {
             tablePlug.smartReload.enable(true);
             table.render({
-                elem: '#table-list',
+                elem: '#table-role',
                 url: '/admin/role/list',
                 method: 'post',
                 dataType: 'JSON',
@@ -68,18 +68,7 @@
                 if (obj.event === 'add') {
                     editView("/admin/role/edit", "新增角色");
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除行么?', function (index) {
-                        let selectData = table.checkStatus('table-list').data;
-                        if (selectData.length > 0) {
-                            let idsArray = [];
-                            for (let i = 0; i < selectData.length; i++) {
-                                idsArray.push(selectData[i].roleId);
-                            }
-                            let ids = idsArray.toString();
-                            changeReq(ids, '/admin/role/del')
-                            layer.close(index);
-                        }
-                    });
+                    changeDel('/admin/role/del', 'table-role');
                 }
             });
 
@@ -94,11 +83,11 @@
             });
 
             form.on('switch(status)', function (obj) {
-                modifyReq('/admin/role/setState', {id: obj.value}, false);
+                modifyReq('/admin/role/setState', {id: obj.value}, 'table-role');
             });
 
             form.on('submit(search)', function (form) {
-                table.reload('table-list', {
+                table.reload('table-role', {
                     where: form.field
                 });
                 return false;

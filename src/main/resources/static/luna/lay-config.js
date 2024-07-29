@@ -46,18 +46,23 @@ function openView(url, title, widthParam, heightParam, isFull) {
     }
 }
 
-function errors(answer) {
-    if (answer.status == 401) {
-        layer.msg("登录超时", {icon: 5, time: 2000});
-        parent.window.location.reload(true);//刷新当前页
-    } else {
-        let json = JSON.parse(answer.responseText)
-        layer.msg(json.msg, {icon: 5, time: 2000});
-    }
-}
-
 function changeReq(ids, url) {
     modifyReq(url, {ids: ids}, false)
+}
+
+function changeDel(url,tableId){
+    layer.confirm('真的删除行么?', function (index) {
+        let selectData = layui.table.checkStatus(tableId).data;
+        if (selectData.length > 0) {
+            let idsArray = [];
+            for (let i = 0; i < selectData.length; i++) {
+                idsArray.push(selectData[i].id);
+            }
+            let ids = idsArray.toString();
+            changeReq(ids, url);
+            layer.close(index);
+        }
+    });
 }
 
 /**
@@ -74,23 +79,23 @@ function modifyReq(url, dataParam, isReload) {
         data: dataParam,
         success: function (data) {
             if (data.code === 0) {
-                layui.layer.msg(data.msg, {icon: 6, time: 1000}, function () {
+                layui.layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                     if (isReload) {
-                        parent.location.replace(parent.location.href);
+                        layui.table.reload(isReload);
                     }
-                    parent.layer.close(parent.layer.getFrameIndex(window.name));
                 });
             } else {
-                if (data.status === 401) {
-                    layer.msg("登录超时", {icon: 5, time: 2000});
-                    parent.window.location.reload(true);//刷新当前页
-                } else {
-                    layui.layer.msg(data.msg, {icon: 5, time: 2000});
-                }
+                layer.msg(data.msg, {icon: 5, time: 2000});
             }
         },
         error: function (event) {
-            errors(event);
+            if (event.status == 401) {
+                layer.msg("登录超时", {icon: 5, time: 2000});
+                parent.window.location.reload(true);//刷新当前页
+            } else {
+                let json = JSON.parse(event.responseText)
+                layer.msg(json.msg, {icon: 5, time: 2000});
+            }
         }
     });
 }

@@ -49,6 +49,7 @@ public abstract class BaseEntity<T> implements Serializable {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     protected Date updateTime;
 
+    protected Long offset;
 
     public BaseEntity() {
     }
@@ -104,5 +105,13 @@ public abstract class BaseEntity<T> implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Long offset) {
+        this.offset = offset;
     }
 }

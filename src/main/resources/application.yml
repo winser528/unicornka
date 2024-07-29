@@ -40,6 +40,31 @@ spring:
     mode: HTML
     servlet:
       content-type: text/html
+  # 定时任务
+  quartz:
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: clusteredScheduler
+            instanceId: AUTO
+            skipUpdateCheck: true
+          jobStore:
+            selectWithLockSQL: SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            tablePrefix: QRTZ_
+            isClustered: false # 打开集群配置
+            clusterCheckinInterval: 2000 # 设置集群检查间隔20s
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+    jdbc:
+      # 初始化Quartz表结构,项目第一次启动配置程always,然后改成never 否则已生成的job会被初始化掉
+      initialize-schema: never
+    job-store-type: jdbc
   mvc:
     converters:
       preferred-json-mapper: fastjson

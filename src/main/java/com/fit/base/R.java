@@ -52,7 +52,7 @@ public class R {
     }
 
     public static R error(String msg) {
-        return getInstance(-1, msg, null, -1);
+        return getInstance(-1, null, msg, -1);
     }
 
     public static R error() {

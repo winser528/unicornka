@@ -40,7 +40,7 @@
                             <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                         </button>
                     </script>
-                    <table class="layui-hide" id="table-list"></table>
+                    <table class="layui-hide" id="table-dept"></table>
                     <script type="text/html" id="column-toolbar">
                         <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
                             <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
@@ -53,7 +53,7 @@
     <script>
         layui.use(['table', 'dtree', 'form', 'tablePlug'], function (table, dtree, form, tablePlug) {
             table.render({
-                elem: '#table-list',
+                elem: '#table-dept',
                 url: '/admin/dept/list',
                 method: 'post',
                 dataType: 'JSON',
@@ -80,18 +80,7 @@
                 if (obj.event === 'add') {
                     editView("/admin/dept/edit", "新增部门");
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除行么?', function (index) {
-                        let selectData = table.checkStatus('table-list').data;
-                        if (selectData.length > 0) {
-                            let idsArray = [];
-                            for (let i = 0; i < selectData.length; i++) {
-                                idsArray.push(selectData[i].id);
-                            }
-                            let ids = idsArray.toString();
-                            changeReq(ids, '/admin/dept/del')
-                            layer.close(index);
-                        }
-                    });
+                    changeDel('/admin/dept/del', 'table-dept');
                 }
             });
             // 行点击事件
@@ -112,7 +101,7 @@
             });
 
             dtree.on("node('deptTree')", function (obj) {
-                table.reload('table-list', {
+                table.reload('table-dept', {
                     where: {
                         pid: obj.param.nodeId
                     }
@@ -121,12 +110,12 @@
             });
             tablePlug.smartReload.enable(true);
             form.on('submit(search)', function (form) {
-                table.reload('table-list', {
+                table.reload('table-dept', {
                     where: form.field
                 });
                 return false;
             });
         });
     </script>
-</body>>
+</body>
 </html>

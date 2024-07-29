@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('任务列表')"/>
+<body class="layui-layout">
+<div class="layui-fluid layui-col-space15">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form-item">
+                <div class="layui-inline">
+                    <label for="name" class="layui-form-label">名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" id="name" placeholder="任务名称" class="layui-input"/>
+                    </div>
+                    <button lay-submit="" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                        <i class="layui-icon layui-icon-search"></i>
+                    </button>
+                    <button type="reset" lay-filter="search" class="layui-btn layui-btn-sm layui-btn-primary table-action">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                    </button>
+                </div>
+            </form>
+            <script type="text/html" id="toolbar">
+                <button type="button" class="layui-btn layui-btn-xs layui-btn-normal" lay-event="add">
+                    <i class="layui-icon layui-icon-addition">新增</i>
+                </button>
+                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                    <i class="layui-icon layui-icon-delete" title="删除">删除</i>
+                </button>
+            </script>
+            <table class="layui-hide" id="table-job"></table>
+            <script type="text/html" id="column-toolbar">
+                <button type="button" class="layui-btn layui-btn-xs" lay-event="start">
+                    <i class="layui-icon layui-icon-edit" title="启动">启动</i>
+                </button>
+                <button type="button" class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pause">
+                    <i class="layui-icon layui-icon-edit" title="暂停">暂停</i>
+                </button>
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="trigger">
+                    <i class="layui-icon layui-icon-edit" title="执行">立即执行</i>
+                </button>
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+                    <i class="layui-icon layui-icon-edit" title="编辑任务">编辑</i>
+                </button>
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['table', 'form', 'tablePlug'], function (table, form, tablePlug) {
+        var states = {"NONE": "停止", "NORMAL": "正常", "PAUSED": "暂停", "COMPLETE": "完成", "ERROR": "错误", "BLOCKED": "锁定"};
+        tablePlug.smartReload.enable(true);
+        table.render({
+            elem: '#table-job',
+            url: '/admin/job/list',
+            method: 'post',
+            dataType: 'JSON',
+            page: true,
+            toolbar: '#toolbar',
+            smartReloadModel: true,
+            cols: [
+                [
+                    {type: 'checkbox'},
+                    {field: 'jobName', title: '名称', minWidth: 80},
+                    {field: 'cronExpression', title: 'CRON', minWidth: 40},
+                    {field: 'beanClass', title: '执行类', minWidth: 80},
+                    {field: 'jobGroup', title: '分组', minWidth: 40},
+                    {field: 'remarks', title: '备注', minWidth: 80},
+                    {
+                        field: 'status', title: '状态', align: 'center', width: 100, templet: function (res) {
+                            return states[res.status] || "";
+                        }
+                    },
+                    {fixed: 'right', title: '操作', align: 'center', minWidth: 310, toolbar: '#column-toolbar'}
+                ]
+            ]
+        });
+        // 工具条点击事件
+        table.on('toolbar', function (obj) {
+            if (obj.event === 'add') {
+                editView("/admin/job/edit", "新增角色");
+            } else if (obj.event === 'del') {
+                changeDel('/admin/job/del', 'table-job');
+            }
+        });
+
+        // 行点击事件
+        table.on('tool', function (obj) {
+            let data = obj.data, event = obj.event;
+            if (event === 'start') {
+                modifyReq('/admin/job/setState', {id: data.id, status: "NORMAL"}, 'table-job');
+            } else if (event === 'pause') {
+                modifyReq('/admin/job/setState', {id: data.id, status: "PAUSED"}, 'table-job');
+            } else if (event === 'trigger') {
+                modifyReq('/admin/job/trigger', {id: data.id}, false);
+            } else if (event === 'edit') {
+                editView("/admin/job/edit?id=" + data.id, "编辑角色");
+            }
+        });
+
+        form.on('submit(search)', function (form) {
+            table.reload('table-job', {
+                where: form.field
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

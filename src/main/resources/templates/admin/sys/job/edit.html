@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="_include :: head('编辑任务')"/>
+<body>
+    <div class="yadmin-body animated fadeIn">
+        <div class="layui-form layui-form-pane">
+            <input type="hidden" name="id" th:value="${dept?.id}" />
+            <div class="layui-form-item">
+                <label for="jobName" class="layui-form-label"><span class="yadmin-red">*</span>任务名称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="jobName" name="jobName" th:value="${job?.jobName}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="cronExpression" class="layui-form-label"><span class="yadmin-red">*</span>cron表达式</label>
+                <div class="layui-input-block">
+                    <input type="text" id="cronExpression" name="cronExpression" th:value="${job?.cronExpression}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="beanClass" class="layui-form-label"><span class="yadmin-red">*</span>执行类</label>
+                <div class="layui-input-block">
+                    <input type="text" id="beanClass" placeholder="请输入包名+类名" name="beanClass" th:value="${job?.beanClass}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="jobGroup" class="layui-form-label"><span class="yadmin-red">*</span>任务分组</label>
+                <div class="layui-input-block">
+                    <input type="text" id="jobGroup" name="jobGroup" th:value="${job?.jobGroup}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="jobDataMap" class="layui-form-label"><span class="yadmin-red">*</span>执行参数</label>
+                <div class="layui-input-block">
+                    <input type="text" id="jobDataMap" name="jobDataMap" th:value="${job?.jobDataMap}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="remarks" class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" id="remarks" name="remarks" th:value="${job?.remarks}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block layui-align">
+                    <button class="layui-btn layui-btn-normal btn-w100" lay-submit="" lay-filter="submit-form">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        layui.use(['form'], function (form) {
+            form.on('submit(submit-form)', function (obj) {
+                modifyReq('/admin/job/save', obj.field, true);
+            });
+        });
+    </script>
+</body>>
+<!-- main end -->
+</html>

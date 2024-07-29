@@ -87,7 +87,7 @@ public class SysUserController extends BaseController {
         SysUser sysUser = BeanUtils.map2Bean(SysUser.class, map);
         int delete = userService.delete(sysUser.getId());
         if (delete > 0) {
-            return R.success("删除成功", null);
+            return R.success("删除成功");
         } else {
             return R.error("删除失败");
         }

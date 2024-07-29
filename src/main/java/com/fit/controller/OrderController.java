@@ -95,7 +95,7 @@ public class OrderController extends BaseController {
         paramsMap.put("isOpen", 1);
         Goods goods = this.goodService.get(id);
         model.addAttribute("g", goods);
-        model.addAttribute("pays", this.zOrderService.getPays());
+        model.addAttribute("pays", this.zOrderService.getListPays());
         model.addAttribute("is_open_geetest", false);
         model.addAttribute("is_open_search_pwd", false);
         model.addAttribute("qrCode", false);

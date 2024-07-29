@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </form>
-                <table class="layui-hide" id="table-list"></table>
+                <table class="layui-hide" id="table-pay"></table>
                 <script type="text/html" id="column-toolbar">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
                         <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
@@ -34,7 +34,7 @@
     <script>
         layui.use(['table', 'form'], function (table, form) {
             table.render({
-                elem: '#table-list',
+                elem: '#table-pay',
                 url: '/admin/pay/list',
                 method: 'post',
                 dataType: 'JSON',
@@ -68,7 +68,7 @@
             });
 
             form.on('submit(search)', function (form) {
-                table.reload('table-list', {
+                table.reload('table-pay', {
                     where: form.field
                 });
                 return false;

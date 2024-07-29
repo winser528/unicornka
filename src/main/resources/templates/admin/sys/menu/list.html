@@ -13,7 +13,7 @@
                         <i class="layui-icon layui-icon-delete" title="删除">删除</i>
                     </button>
                 </script>
-                <table class="layui-hide" id="table-list"></table>
+                <table class="layui-hide" id="table-menu"></table>
                 <script type="text/html" id="column-toolbar">
                     <button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
                         <i class="layui-icon layui-icon-edit" title="编辑">编辑</i>
@@ -27,7 +27,7 @@
             layer.load(2);  //加载层
             var table = tableTree.render({
                 id: 'menu',
-                elem: '#table-list',
+                elem: '#table-menu',
                 url: '/admin/menu/list',
                 height: 'full-150',
                 method: 'post',
@@ -67,18 +67,7 @@
                 if (obj.event === 'add') {
                     editView("/admin/menu/edit", "添加菜单");
                 } else if (obj.event === 'del') {
-                    layer.confirm('真的删除行么?', function (index) {
-                        let selectData = table.checkStatus('menu');
-                        if (selectData.length > 0) {
-                            let idsArray = [];
-                            for (let i = 0; i < selectData.length; i++) {
-                                idsArray.push(selectData[i].id);
-                            }
-                            let ids = idsArray.toString();
-                            changeReq(ids, '/admin/menu/del')
-                            layer.close(index);
-                        }
-                    });
+                    changeDel('/admin/menu/del', 'menu');
                 }
             });
 

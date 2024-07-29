@@ -11,33 +11,33 @@ import java.util.Properties;
 
 /**
  * @TITLE LogProUtils.java
- * @NAME ½»Ò×ÈÕÖ¾×¨Òµ¹¤¾ß
+ * @NAME äº¤æ˜“æ—¥å¿—ä¸“ä¸šå·¥å…·
  * @DATE 2017-1-11
  */
 public class LogProUtils {
 
-	/** ÅäÖÃÎÄ¼ş */
+	/** é…ç½®æ–‡ä»¶ */
 	private static Properties p = new Properties();
-	/** ¶ÁÈ¡µÄÅäÖÃÎÄ¼şÃû */
+	/** è¯»å–çš„é…ç½®æ–‡ä»¶å */
 	private static final String propertiesFileName = "paylog.properties";
-	/** Â·¾¶ÅäÖÃ·½Ê½ on:¾ø¶ÔÂ·¾¶£¬off:Ïà¶ÔÂ·¾¶,Ä¬ÈÏ¾ø¶ÔÂ·¾¶ £¨Ïà¶ÔÂ·¾¶ÊÇÏà¶ÔÓÚÓ¦ÓÃ·şÎñÔËĞĞÊ±µÄWEB-INF/classesÄ¿Â¼£© */
+	/** è·¯å¾„é…ç½®æ–¹å¼ on:ç»å¯¹è·¯å¾„ï¼Œoff:ç›¸å¯¹è·¯å¾„,é»˜è®¤ç»å¯¹è·¯å¾„ ï¼ˆç›¸å¯¹è·¯å¾„æ˜¯ç›¸å¯¹äºåº”ç”¨æœåŠ¡è¿è¡Œæ—¶çš„WEB-INF/classesç›®å½•ï¼‰ */
 	private static final String absoluPathOFF = "off";
-	/** ¾ø¶ÔÂ·¾¶¿ª¹Ø */
+	/** ç»å¯¹è·¯å¾„å¼€å…³ */
 	public static final String absoluPathFlag;
-	/** ÈÕÖ¾¼¶±ğ,debug¿ªÆô»ò¹Ø±Õ,Ä¬ÈÏ¹Ø±Õ */
+	/** æ—¥å¿—çº§åˆ«,debugå¼€å¯æˆ–å…³é—­,é»˜è®¤å…³é—­ */
 	public static final String logLevel;
-	/** ÈÕÖ¾Éú³ÉÂ·¾¶ */
+	/** æ—¥å¿—ç”Ÿæˆè·¯å¾„ */
 	public static final String logPath;
-	/** classPath¸ù¿ªÊ¼²éÕÒ */
+	/** classPathæ ¹å¼€å§‹æŸ¥æ‰¾ */
 	private static String fixPath;
-	/** ¶ÔÓ¦µÄ²Ù×÷ÏµÍ³ */
+	/** å¯¹åº”çš„æ“ä½œç³»ç»Ÿ */
 	private static String OS = System.getProperty("os.name").toLowerCase();
 
 	public static final String fileDownloadPath = getAbsolutePath(p.getProperty("fileDownloadPath"));
 
 	static {
 		try {
-			debug("¼ÓÔØÈÕÖ¾ÅäÖÃÎÄ¼ş...........Start..........");
+			debug("åŠ è½½æ—¥å¿—é…ç½®æ–‡ä»¶...........Start..........");
 			fixPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
 			fixPath = URLDecoder.decode(fixPath, "utf-8");
 			if ((fixPath.startsWith("/")) && (OS.indexOf("linux") < 0)) {
@@ -49,9 +49,9 @@ public class LogProUtils {
 			BufferedReader bf = new BufferedReader(new InputStreamReader(inputStream, "GBK"));
 			p.load(bf);
 			inputStream.close();
-			debug("¼ÓÔØÈÕÖ¾ÅäÖÃÎÄ¼ş..........End..........");
+			debug("åŠ è½½æ—¥å¿—é…ç½®æ–‡ä»¶..........End..........");
 		} catch (Throwable e) {
-			error("¼ÓÔØÈÕÖ¾ÅäÖÃÎÄ¼şÊ§°Ü", e);
+			error("åŠ è½½æ—¥å¿—é…ç½®æ–‡ä»¶å¤±è´¥", e);
 		}
 
 		absoluPathFlag = p.getProperty("absoluPathFlag");
@@ -81,20 +81,20 @@ public class LogProUtils {
 			} else {
 				outPath = outPath + path;
 			}
-			System.out.println("UPµÃµ½¾ø¶ÔÂ·¾¶£º====>" + outPath);
+			System.out.println("UPå¾—åˆ°ç»å¯¹è·¯å¾„ï¼š====>" + outPath);
 			return outPath;
 		}
-		System.out.println("DOWNµÃµ½¾ø¶ÔÂ·¾¶£º====>" + path);
+		System.out.println("DOWNå¾—åˆ°ç»å¯¹è·¯å¾„ï¼š====>" + path);
 		return path;
 	}
 
 	/**
-	 * Éú³ÉÎÄ¼ş
-	 * 
+	 * ç”Ÿæˆæ–‡ä»¶
+	 *
 	 * @param msgCode
-	 *            ÏûÏ¢ÀàĞÍÂë
+	 *            æ¶ˆæ¯ç±»å‹ç 
 	 * @param filedata
-	 *            ĞÅÏ¢Á÷Êı¾İ
+	 *            ä¿¡æ¯æµæ•°æ®
 	 */
 	public static String buildfile(String msgCode, byte[] filedata) throws Exception {
 		String filePath = "";
@@ -112,20 +112,20 @@ public class LogProUtils {
 				outputStream.write(filedata);
 			}
 		} catch (Exception e) {
-			throw new Exception("±£´æÎÄ¼ş[" + filePath + "]Ê§°Ü");
+			throw new Exception("ä¿å­˜æ–‡ä»¶[" + filePath + "]å¤±è´¥");
 		}
 		return filePath;
 	}
 
 	/**
-	 * ÈÕÖ¾ÏûÏ¢
+	 * æ—¥å¿—æ¶ˆæ¯
 	 */
 	public static void msg(String sWord) {
 		logWriter(sWord, "msg");
 	}
 
 	/**
-	 * DebugÈÕÖ¾
+	 * Debugæ—¥å¿—
 	 */
 	public static void debug(String sWord) {
 		if ("debug".equals(logLevel))
@@ -133,31 +133,31 @@ public class LogProUtils {
 	}
 
 	/**
-	 * ´íÎóÈÕÖ¾
+	 * é”™è¯¯æ—¥å¿—
 	 */
 	public static void error(String errorMessage) {
 		logWriter(errorMessage, "error");
 	}
 
 	/**
-	 * ´íÎóÈÕÖ¾
-	 * 
+	 * é”™è¯¯æ—¥å¿—
+	 *
 	 * @param sWord
-	 *            ÏûÏ¢ÄÚÈİ
+	 *            æ¶ˆæ¯å†…å®¹
 	 * @param t
-	 *            Òì³£·½·¨
+	 *            å¼‚å¸¸æ–¹æ³•
 	 */
 	public static void error(String sWord, Throwable t) {
 		logWriter(sWord + "\r\n" + t.toString(), "error");
 	}
 
 	/**
-	 * ÈÕÖ¾Êä³öµ½ÎÄ¼ş
-	 * 
+	 * æ—¥å¿—è¾“å‡ºåˆ°æ–‡ä»¶
+	 *
 	 * @param sWord
-	 *            ÄÚÈİ
+	 *            å†…å®¹
 	 * @param level
-	 *            ÈÕÖ¾¼¶±ğ
+	 *            æ—¥å¿—çº§åˆ«
 	 */
 	private static void logWriter(String sWord, String level) {
 		String logRoot = logPath;
@@ -172,13 +172,13 @@ public class LogProUtils {
 				writer.write("\r\nLOG[ " + PayDateUtil.getNowDate(PayDateUtil.TIMEF_FORMAT) + "]\r\n" + sWord);
 				writer.close();
 			} catch (Exception e) {
-				error("±£´æÈÕÖ¾ÎÄ¼ş[" + logName + "]Ê§°Ü", e);
+				error("ä¿å­˜æ—¥å¿—æ–‡ä»¶[" + logName + "]å¤±è´¥", e);
 			}
 		}
 	}
 
 	/**
-	 * ´´½¨Ä¿Â¼
+	 * åˆ›å»ºç›®å½•
 	 */
 	private static void createDir(String path) {
 		File dir = new File(path);
@@ -186,7 +186,7 @@ public class LogProUtils {
 			if (!path.endsWith(File.separator))
 				path = path + File.separator;
 			if (!dir.mkdirs())
-				error("´´½¨Ä¿Â¼[" + path + "]Ê§°Ü");
+				error("åˆ›å»ºç›®å½•[" + path + "]å¤±è´¥");
 		}
 	}
 }
