@@ -24,6 +24,7 @@ layui.define(['table'], function (exports) {
     , hint = layui.hint()
     , device = layui.device();
 
+
   if (!form.render.plugFlag) {
     // 只要未改造过的才需要改造一下
     // 保留一下原始的form.render
@@ -111,7 +112,6 @@ layui.define(['table'], function (exports) {
     , getIns = function (id) {
       return table.thisTable.that[id];
     }
-
     , tableCheck = function () {
       var checked = {};
       return {

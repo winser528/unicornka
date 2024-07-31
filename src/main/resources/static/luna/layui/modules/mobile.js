@@ -5,11 +5,9 @@
  @License：MIT
     
  */
-
- 
 if(!layui['layui.mobile']){
   layui.config({
-    base: layui.cache.dir + 'lay/modules/mobile/'
+    base: layui.cache.dir + 'modules/mobile/'
   }).extend({
     'layer-mobile': 'layer-mobile'
     ,'zepto': 'zepto'

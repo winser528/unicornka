@@ -12,21 +12,21 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label for="cronExpression" class="layui-form-label"><span class="yadmin-red">*</span>cron表达式</label>
+                <label for="cron" class="layui-form-label"><span class="yadmin-red">*</span>cron表达式</label>
                 <div class="layui-input-block">
-                    <input type="text" id="cronExpression" name="cronExpression" th:value="${job?.cronExpression}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                    <input type="text" id="cron" name="cronExpression" th:value="${job?.cronExpression}" lay-verify="required" lay-vertype="tips" class="layui-input" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label for="beanClass" class="layui-form-label"><span class="yadmin-red">*</span>执行类</label>
                 <div class="layui-input-block">
-                    <input type="text" id="beanClass" placeholder="请输入包名+类名" name="beanClass" th:value="${job?.beanClass}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                    <input type="text" id="beanClass" placeholder="请输入包名+类名" name="beanClass" th:value="${job?.beanClass}" lay-verify="required" lay-vertype="tips" class="layui-input" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label for="jobGroup" class="layui-form-label"><span class="yadmin-red">*</span>任务分组</label>
                 <div class="layui-input-block">
-                    <input type="text" id="jobGroup" name="jobGroup" th:value="${job?.jobGroup}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                    <input type="text" id="jobGroup" name="jobGroup" th:value="${job?.jobGroup}" lay-verify="required" lay-vertype="tips" class="layui-input" />
                 </div>
             </div>
             <div class="layui-form-item">
@@ -49,12 +49,20 @@
         </div>
     </div>
     <script>
-        layui.use(['form'], function (form) {
+        layui.use(['jquery', 'form', 'cron'], function ($, form, cron) {
+            cron.render({
+                elem: "#cron", // 绑定元素
+                value: $("#cron").val(), // 默认值
+                done: function (cronStr) {
+                    $("#cron").val(cronStr);
+                },
+            });
+
             form.on('submit(submit-form)', function (obj) {
                 modifyReq('/admin/job/save', obj.field, true);
             });
         });
     </script>
-</body>>
+</body>
 <!-- main end -->
 </html>
