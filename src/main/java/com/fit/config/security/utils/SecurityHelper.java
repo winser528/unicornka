@@ -1,5 +1,6 @@
 package com.fit.config.security.utils;
 
+import com.fit.config.security.entity.UserDetail;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,11 +27,18 @@ public class SecurityHelper {
     }
 
     /**
-     * 获取用户信息
+     * 获取当前用户
      */
-    public static User getUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return (User) auth.getPrincipal();
+    public static UserDetail getUser() {
+        return (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public static Long getUserId() {
+        return getUser().getId();
+    }
+
+    public static String getUserName() {
+        return getUser().getUsername();
     }
 
     /**

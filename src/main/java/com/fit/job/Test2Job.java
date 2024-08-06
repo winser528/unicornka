@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
  * @DATE 2024/7/26
  */
 @Slf4j
-// @DisallowConcurrentExecution //不并发执行
 public class Test2Job extends QuartzJobBean {
 
     @Autowired

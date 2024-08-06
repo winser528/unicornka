@@ -60,8 +60,10 @@ function changeDel(url,tableId){
             }
             let ids = idsArray.toString();
             changeReq(ids, url);
-            layer.close(index);
+        } else {
+            layer.msg("请选中要删除的对象", {icon: 5, time: 2000});
         }
+        layer.close(index);
     });
 }
 
@@ -83,6 +85,7 @@ function modifyReq(url, dataParam, isReload) {
                     if (isReload) {
                         layui.table.reload(isReload);
                     }
+                    parent.layer.close(parent.layer.getFrameIndex(window.name));
                 });
             } else {
                 layer.msg(data.msg, {icon: 5, time: 2000});

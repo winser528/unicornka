@@ -2,9 +2,11 @@ package com.fit.controller.admin;
 
 import com.fit.base.BaseController;
 import com.fit.base.R;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.SysMenu;
 import com.fit.service.SysMenuService;
 import com.fit.util.BeanUtils;
+import com.fit.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,8 +63,12 @@ public class SysMenuController extends BaseController {
         try {
             SysMenu menu = BeanUtils.map2Bean(SysMenu.class, map);
             if (isNotEmpty(menu.getId())) {
+                menu.setUpdateTime(DateUtils.nowDate());
+                menu.setUpdateUser(SecurityHelper.getUserId());
                 service.update(menu);
             } else {
+                menu.setCreateTime(DateUtils.nowDate());
+                menu.setCreateUser(SecurityHelper.getUserId());
                 service.save(menu);
             }
             return R.success();

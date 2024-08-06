@@ -2,6 +2,7 @@ package com.fit.controller.admin;
 
 import com.fit.base.BaseController;
 import com.fit.base.R;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.SysRole;
 import com.fit.service.SysRoleService;
 import com.fit.util.BeanUtils;
@@ -69,8 +70,11 @@ public class SysRoleController extends BaseController {
             SysRole role = BeanUtils.map2Bean(SysRole.class, map);
             if (isNotEmpty(role.getId())) {
                 role.setUpdateTime(DateUtils.nowDate());
+                role.setUpdateUser(SecurityHelper.getUserId());
                 roleService.update(role);
             } else {
+                role.setCreateTime(DateUtils.nowDate());
+                role.setCreateUser(SecurityHelper.getUserId());
                 roleService.save(role);
             }
             return R.success();

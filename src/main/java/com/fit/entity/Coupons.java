@@ -24,7 +24,7 @@ public class Coupons extends BaseEntity<Coupons> {
     /** 优惠金额  (默认值为: 0.00) */
     private BigDecimal discount;
 
-    /** 是否已经使用 1未使用 2已使用  (默认值为: 1) */
+    /** 是否已经使用 0未使用 1已使用  (默认值为: 0) */
     private Boolean isUse;
 
     /** 是否启用 1是 0否  (默认值为: 1) */

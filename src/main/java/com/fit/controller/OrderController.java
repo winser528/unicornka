@@ -1,5 +1,6 @@
 package com.fit.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fit.base.BaseController;
 import com.fit.base.R;
 import com.fit.config.SnowFlake;
@@ -12,6 +13,7 @@ import com.fit.service.*;
 import com.fit.util.BeanUtils;
 import com.fit.util.ConverterUtils;
 import com.fit.util.DateUtils;
+import com.fit.util.FastJsonUtil;
 import com.pay.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -46,13 +50,26 @@ public class OrderController extends BaseController {
      * 下单支付页面
      */
     @PostMapping("/bill")
-    public String bill(HttpServletRequest request, Model model) {
+    public String bill(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Cookie[] cookies = request.getCookies();
         Map<String, Object> paramsMap = getRequestParamsMap(request);
         String inCoupons = paramsMap.get("coupon").toString();
         try {
             Orders bean = BeanUtils.map2Bean(Orders.class, paramsMap);
             bean.setBuyIp(HttpUtil.getRemoteIp(request));
-            zOrderService.bill(bean, inCoupons);
+            zOrderService.creatOrder(bean, inCoupons);
+            // 设置cookie查询
+            for (Cookie cookie : cookies) {
+                if ("unicorn_orders".equals(cookie.getName())) {
+                    JSONArray array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
+                    array.add(bean.getOrderSn());
+                    response.addCookie(new Cookie("unicorn_orders", array.toJSONString()));
+                } else {
+                    JSONArray jsonArray = new JSONArray();
+                    jsonArray.add(bean.getOrderSn());
+                    response.addCookie(new Cookie("unicorn_orders", jsonArray.toJSONString()));
+                }
+            }
             // 支付信息
             Pays pays = this.zOrderService.getPayById(bean.getPayId());
             model.addAttribute("order", bean);

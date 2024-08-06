@@ -26,7 +26,7 @@ public class Carmis extends BaseEntity<Carmis> {
     /** 商品名称 (无默认值) */
     private String gdName;
 
-    /** 状态 1未售出 2已售出  (默认值为: 1) */
+    /** 状态 0未售出 1已售出  (默认值为: 0) */
     private Boolean status;
 
     /** 循环卡密 1是 0否  (默认值为: 0) */

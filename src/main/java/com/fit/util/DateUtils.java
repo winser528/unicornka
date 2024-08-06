@@ -11,7 +11,7 @@ import java.util.TimeZone;
 /**
  * 日期处理工具类
  *
- * @Description: 工具类，可以用作获取系统日期、订单编号等(该代码仅供学习和研究支付宝接口使用，只是提供一个参考)
+ * @Description: 工具类，可以用作获取系统日期、订单编号等
  */
 public class DateUtils {
 
@@ -139,9 +139,7 @@ public class DateUtils {
      * @return
      */
     public static int compareDateWithNow(Date date) {
-        Date now = new Date();
-        int rnum = date.compareTo(now);
-        return rnum;
+        return date.compareTo(nowDate());
     }
 
     /**
@@ -200,7 +198,7 @@ public class DateUtils {
      * @return long 时间戳
      */
     public static long dateZeroToUnixTimestamp() {
-        String nowDay = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String nowDay = new SimpleDateFormat("yyyy-MM-dd").format(nowDate());
         nowDay += " 00:00:00";
         return dateToUnixTimestamp(nowDay);
     }
@@ -211,8 +209,7 @@ public class DateUtils {
      * @return long 时间戳
      */
     public static long dateToUnixTimestamp() {
-        long timestamp = new Date().getTime();
-        return timestamp;
+        return nowDate().getTime();
     }
 
     /**
@@ -234,8 +231,7 @@ public class DateUtils {
      * @return String 日期字符串
      */
     public static String TimeStamp2Date(long timestamp, String dateFormat) {
-        String date = new SimpleDateFormat(dateFormat).format(new Date(timestamp));
-        return date;
+        return new SimpleDateFormat(dateFormat).format(new Date(timestamp));
     }
 
     /**
@@ -245,8 +241,7 @@ public class DateUtils {
      * @return String 日期字符串
      */
     public static String TimeStamp2Date(long timestamp) {
-        String date = new SimpleDateFormat(DATE_FULL_STR).format(new Date(timestamp));
-        return date;
+        return new SimpleDateFormat(DATE_FULL_STR).format(new Date(timestamp));
     }
 
     /**
@@ -317,9 +312,8 @@ public class DateUtils {
      * @return 以yyyyMMddHHmmss为格式的当前系统时间
      */
     public static String getOrderNum() {
-        Date date = new Date();
         DateFormat df = new SimpleDateFormat(DATE_All_KEY_STR);
-        return df.format(date);
+        return df.format(nowDate());
     }
 
     /**
@@ -328,9 +322,8 @@ public class DateUtils {
      * @return
      */
     public static String getDateFormatter() {
-        Date date = new Date();
         DateFormat df = new SimpleDateFormat(DATE_FULL_STR);
-        return df.format(date);
+        return df.format(nowDate());
     }
 
     /**
@@ -339,9 +332,8 @@ public class DateUtils {
      * @return
      */
     public static String getDate() {
-        Date date = new Date();
         DateFormat df = new SimpleDateFormat(dtShort);
-        return df.format(date);
+        return df.format(nowDate());
     }
 
     /**
@@ -394,9 +386,8 @@ public class DateUtils {
      * @Return:
      */
     public static Date getYesterDay() {
-        Date date = new Date();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTime(nowDate());
         calendar.add(Calendar.DATE, -1);// 把日期往后增加一天.整数往后推,负数往前移动
         return calendar.getTime();
     }
@@ -407,9 +398,8 @@ public class DateUtils {
      * @Descb 当前时间加上 年份 所得的 日期
      */
     public static String getYear(int year) {
-        Date date = new Date();
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTime(nowDate());
         calendar.add(Calendar.YEAR, +year);
         String theday = new SimpleDateFormat(DATE_FULL_STR).format(calendar.getTime());
         return theday;
@@ -437,7 +427,7 @@ public class DateUtils {
      * 获取昨天零点的时间戳
      */
     public static long getNowZeroDate() {
-        String now = new SimpleDateFormat(DATE_SMALL_STR).format(new Date());
+        String now = new SimpleDateFormat(DATE_SMALL_STR).format(nowDate());
         now += " 00:00:00";
         return dateToUnixTimestamp(now);
     }
@@ -446,7 +436,7 @@ public class DateUtils {
      * 获取昨天23:59:59的时间戳
      */
     public static long getNowDate() {
-        String now = new SimpleDateFormat(DATE_SMALL_STR).format(new Date());
+        String now = new SimpleDateFormat(DATE_SMALL_STR).format(nowDate());
         now += " 23:59:59";
         return dateToUnixTimestamp(now);
     }

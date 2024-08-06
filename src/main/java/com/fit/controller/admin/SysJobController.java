@@ -3,9 +3,12 @@ package com.fit.controller.admin;
 import com.fit.base.BaseController;
 import com.fit.base.R;
 import com.fit.config.quartz.QuartzHandler;
+import com.fit.config.quartz.StatusEnum;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.SysJob;
 import com.fit.service.SysJobService;
 import com.fit.util.BeanUtils;
+import com.fit.util.DateUtils;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,8 +75,14 @@ public class SysJobController extends BaseController {
         try {
             SysJob bean = BeanUtils.map2Bean(SysJob.class, map);
             if (isNotEmpty(bean.getId())) {
+                bean.setUpdateUser(SecurityHelper.getUserId());
+                bean.setUpdateTime(DateUtils.nowDate());
                 service.update(bean);
+                quartz.updateCronExpression(bean);
             } else {
+                bean.setStatus(StatusEnum.PAUSED.getState());
+                bean.setCreateUser(SecurityHelper.getUserId());
+                bean.setCreateTime(DateUtils.nowDate());
                 service.save(bean);
             }
             return R.success();
@@ -86,16 +95,27 @@ public class SysJobController extends BaseController {
     @ResponseBody
     public Object userDel(HttpServletRequest request) {
         Map<String, Object> map = getRequestParamsMap(request);
-        SysJob bean = BeanUtils.map2Bean(SysJob.class, map);
-        int delete = service.delete(bean.getId());
-        if (delete > 0) {
-            quartz.delete(bean);
+        try {
+            String[] ids = map.get("ids").toString().trim().split(",");
+            for (String id : ids) {
+                SysJob job = this.service.get(Long.valueOf(id));
+                service.delete(job.getId());
+                quartz.delete(job);
+            }
             return R.success("删除成功");
-        } else {
-            return R.error("删除失败");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
+        return R.success("删除失败");
     }
 
+    /**
+     * 修改定时状态
+     *
+     * @param id     任务ID
+     * @param status 任务状态
+     * @return
+     */
     @PostMapping("/setState")
     @ResponseBody
     public Object setState(@RequestParam Long id, String status) {

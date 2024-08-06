@@ -2,9 +2,11 @@ package com.fit.controller.admin;
 
 import com.fit.base.BaseController;
 import com.fit.base.R;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.SysUser;
 import com.fit.service.SysUserService;
 import com.fit.util.BeanUtils;
+import com.fit.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,8 +72,12 @@ public class SysUserController extends BaseController {
         try {
             SysUser sysUser = BeanUtils.map2Bean(SysUser.class, map);
             if (isNotEmpty(sysUser.getId())) {
+                sysUser.setUpdateUser(SecurityHelper.getUserId());
+                sysUser.setUpdateTime(DateUtils.nowDate());
                 userService.update(sysUser);
             } else {
+                sysUser.setCreateUser(SecurityHelper.getUserId());
+                sysUser.setCreateTime(DateUtils.nowDate());
                 userService.save(sysUser);
             }
             return R.success();
@@ -152,7 +158,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("/authRole")
     @ResponseBody
-    public Object changeFreeze(@RequestParam Long userId,@RequestParam Long roleId) {
+    public Object changeFreeze(@RequestParam Long userId, @RequestParam Long roleId) {
         SysUser sysUser = this.userService.get(userId);
         if (sysUser != null) {
             sysUser.setRoleId(roleId);

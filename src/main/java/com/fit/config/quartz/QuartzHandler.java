@@ -36,24 +36,11 @@ public class QuartzHandler {
     private void onApplicationEvent(ContextRefreshedEvent event) {
         List<SysJob> jobs = service.findList(new SysJob());
         for (SysJob job : jobs) {
-            try {
-                String jobName = job.getJobName();
-                String jobGroup = job.getJobGroup();
-                // 检查作业是否已存在
-                if (has(job)) {
-                    runStatus(job.getStatus(), job);
-                } else {
-                    // 创建任务详情
-                    JobDetail jobDetail = JobBuilder.newJob(getClazz(job.getBeanClass()))
-                            .withIdentity(jobName, jobGroup).usingJobData("jobStatus", job.getStatus()).build();
-                    // 触发Cron
-                    CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup)
-                            .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExpression())).build();
-                    // 添加计划作业
-                    scheduler.scheduleJob(jobDetail, trigger);
-                }
-            } catch (SchedulerException | ClassNotFoundException e) {
-                e.printStackTrace();
+            // 检查作业是否已存在
+            if (has(job)) {
+                runStatus(job.getStatus(), job);
+            } else {
+                this.create(job);
             }
         }
     }
@@ -70,40 +57,49 @@ public class QuartzHandler {
     }
 
     /**
-     * 新增定义任务
+     * 将任务参数转换成JobDataMap
      *
-     * @param job     定义任务
-     * @param forName 任务执行类路径
+     * @param jobData
      * @return
      */
-    public boolean crate(SysJob job, String forName) {
+    private JobDataMap converter(String jobData) {
+        // 处理参数
+        JobDataMap map = new JobDataMap();
+        if (isNotEmpty(jobData)) {
+            if (isJson(jobData)) {
+                map.putAll(FastJsonUtil.json2Map(jobData));
+            }
+        }
+        return map;
+    }
+
+    /**
+     * 新增定义任务
+     *
+     * @param job 定义任务
+     * @return
+     */
+    public boolean create(SysJob job) {
         boolean result = true;
         try {
             String jobName = job.getJobName();
             String jobGroup = job.getJobGroup();
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroup);
             CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+            CronScheduleBuilder cronSchedule = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             if (null == cronTrigger) {
-                // 处理参数
-                JobDataMap map = new JobDataMap();
-                String jobDataMap = job.getJobDataMap();
-                if (isNotEmpty(jobDataMap)) {
-                    if (isJson(jobDataMap)) {
-                        map.putAll(FastJsonUtil.json2Map(jobDataMap));
-                    }
-                }
                 // 启动定时任务
-                JobDetail jobDetail = JobBuilder.newJob(getClazz(forName)).withIdentity(jobName, jobGroup).setJobData(map).build();
-                cronTrigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup)
-                        .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExpression())).build();
+                JobDetail jobDetail = JobBuilder.newJob(this.getClazz(job.getBeanClass())).withIdentity(jobName, jobGroup)
+                        .setJobData(this.converter(job.getJobDataMap())).build();
+                // 设置启动周期
+                cronTrigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroup).withSchedule(cronSchedule).build();
                 scheduler.scheduleJob(jobDetail, cronTrigger);
-                if (!scheduler.isShutdown()) {
-                    scheduler.start();
+                if (!(job.getStatus().equals(StatusEnum.NORMAL.getState()))) {
+                    scheduler.pauseJob(jobDetail.getKey());
                 }
             } else {
                 // 重启定时任务
-                cronTrigger = cronTrigger.getTriggerBuilder().withIdentity(triggerKey)
-                        .withSchedule(CronScheduleBuilder.cronSchedule(job.getCronExpression())).build();
+                cronTrigger = cronTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(cronSchedule).build();
                 scheduler.rescheduleJob(triggerKey, cronTrigger);
             }
         } catch (SchedulerException | ClassNotFoundException e) {
@@ -174,20 +170,20 @@ public class QuartzHandler {
     /**
      * 修改触发时间表达式
      *
-     * @param job               定时任务
-     * @param newCronExpression 新的cron表达式
+     * @param job 定时任务
      * @return
      */
-    public boolean updateCronExpression(SysJob job, String newCronExpression) {
+    public boolean updateCronExpression(SysJob job) {
         boolean result = true;
         try {
             TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
             CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-            job.setCronExpression(newCronExpression);
             CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
             cronTrigger = cronTrigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(cronScheduleBuilder).build();
-            scheduler.rescheduleJob(triggerKey, cronTrigger);
-            log.info(String.format("立即执行定时任务：%s", job.getJobName()));
+            if (!(job.getStatus().equals(StatusEnum.NORMAL.getState()))) {
+                scheduler.rescheduleJob(triggerKey, cronTrigger);
+                log.info(String.format("立即执行定时任务：%s", job.getJobName()));
+            }
         } catch (SchedulerException e) {
             log.error("修改触发时间表达式异常：{}", e.getMessage());
             result = false;

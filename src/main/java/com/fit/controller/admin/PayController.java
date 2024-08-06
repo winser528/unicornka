@@ -2,6 +2,7 @@ package com.fit.controller.admin;
 
 import com.fit.base.BaseController;
 import com.fit.base.R;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.Pays;
 import com.fit.service.PaysService;
 import com.fit.util.BeanUtils;
@@ -66,8 +67,11 @@ public class PayController extends BaseController {
             Pays bean = BeanUtils.map2Bean(Pays.class, map);
             if (isNotEmpty(bean.getId())) {
                 bean.setUpdateTime(DateUtils.nowDate());
+                bean.setUpdateUser(SecurityHelper.getUserId());
                 service.update(bean);
             } else {
+                bean.setCreateTime(DateUtils.nowDate());
+                bean.setCreateUser(SecurityHelper.getUserId());
                 service.save(bean);
             }
             return R.success();

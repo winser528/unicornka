@@ -1,18 +1,21 @@
 package com.fit.config.security.service;
 
+import com.fit.config.security.entity.UserDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,21 +34,26 @@ public class UserDetailServices implements UserDetailsService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private final String user_sql = "SELECT u.`username`,u.`password` FROM `sys_user` u WHERE u.`USERNAME`=?";
+    private final String user_sql = "SELECT u.`id`,u.`username`,u.`password` FROM `sys_user` u WHERE u.`USERNAME`=?";
 
     private final String sql = "SELECT r.`NAME` FROM `sys_role` r,`sys_user` u WHERE u.`ROLE_ID`=r.`ID` and u.`USERNAME`=?";
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         boolean isDebug = logger.isDebugEnabled();
-        if (isDebug) {
-            logger.debug("===================================> 登陆访问第二步");
-        }
         if (StringUtils.isEmpty(username)) {
             throw new UsernameNotFoundException("用户名不能为空！");
         }
-        Map<String, ?> userMap = jdbcTemplate.queryForMap(user_sql, username);
-        if (userMap == null) {
+        UserDetail user = jdbcTemplate.query(user_sql, new Object[]{username}, new ResultSetExtractor<UserDetail>() {
+            @Override
+            public UserDetail extractData(ResultSet rs) throws SQLException {
+                if (rs.next()) {
+                    return new UserDetail(rs.getString("username"), rs.getString("password"), new ArrayList<>(), rs.getLong("id"));
+                }
+                return null;
+            }
+        });
+        if (user == null) {
             throw new UsernameNotFoundException("不存在用户名！");
         }
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql, username);
@@ -59,8 +67,8 @@ public class UserDetailServices implements UserDetailsService {
         }
         if (isDebug) {
             logger.debug("得到其权限：" + grantedAuthorities);
+            logger.debug("===================================> 登陆访问第二步");
         }
-
-        return new User(userMap.get("username").toString(), userMap.get("password").toString(), grantedAuthorities);
+        return new UserDetail(user.getUsername(), user.getPassword(), grantedAuthorities, user.getId());
     }
 }

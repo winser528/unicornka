@@ -2,6 +2,7 @@ package com.fit.controller.admin;
 
 import com.fit.base.BaseController;
 import com.fit.base.R;
+import com.fit.config.security.utils.SecurityHelper;
 import com.fit.entity.Emailtpls;
 import com.fit.service.EmailtplsService;
 import com.fit.util.BeanUtils;
@@ -66,8 +67,11 @@ public class EmailTplsController extends BaseController {
             Emailtpls bean = BeanUtils.map2Bean(Emailtpls.class, map);
             if (isNotEmpty(bean.getId())) {
                 bean.setUpdateTime(DateUtils.nowDate());
+                bean.setUpdateUser(SecurityHelper.getUserId());
                 service.update(bean);
             } else {
+                bean.setCreateTime(DateUtils.nowDate());
+                bean.setCreateUser(SecurityHelper.getUserId());
                 service.save(bean);
             }
             return R.success();

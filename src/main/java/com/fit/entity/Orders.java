@@ -33,7 +33,7 @@ public class Orders extends BaseEntity<Orders> {
     /** 订单名称 (无默认值) */
     private String title;
 
-    /** 订单类型: 1-自动发货 2-人工处理  (默认值为: 1) */
+    /** 订单类型: 0-人工处理 1-自动发货  (默认值为: 1) */
     private Boolean type;
 
     /** 商品单价  (默认值为: 0.00) */
