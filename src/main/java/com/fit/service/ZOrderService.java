@@ -1,5 +1,6 @@
 package com.fit.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fit.config.SnowFlake;
 import com.fit.entity.*;
 import com.fit.util.DateUtils;
@@ -189,5 +190,10 @@ public class ZOrderService {
 
     public Pays getPayById(Long id) {
         return this.payService.get(id);
+    }
+
+    public List<Orders> getCookieOrder(JSONArray array) {
+        String sql = "SELECT * from orders where id IN (?)";
+        return this.jdbcTemplate.queryForList(sql, Orders.class, array.toString().replace("\\[|]", ""));
     }
 }

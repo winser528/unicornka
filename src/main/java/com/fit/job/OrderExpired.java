@@ -53,17 +53,23 @@ public class OrderExpired implements Job {
         orders.setStatus(1);
         List<Orders> list = this.service.findList(orders);
         for (Orders order : list) {
-            Date createTime = order.getCreateTime();
-            if (calculateSecondsDifference(createTime) > timeout) {
-                order.setStatus(-1);
-                if (order.getCouponId() != null) {
-                    order.setCouponRetBack(true);
-                    Coupons coupons = this.couponsService.get(order.getCouponId());
-                    coupons.setIsUse(true);
-                    coupons.setRet(coupons.getRet() + 1);
-                    this.couponsService.update(coupons);
+            try {
+                Date createTime = order.getCreateTime();
+                if (calculateSecondsDifference(createTime) > timeout) {
+                    order.setStatus(-1);
+                    if (order.getCouponId() != null) {
+                        order.setCouponRetBack(true);
+                        Coupons coupons = this.couponsService.get(order.getCouponId());
+                        if (coupons != null) {
+                            coupons.setIsUse(true);
+                            coupons.setRet(coupons.getRet() + 1);
+                            this.couponsService.update(coupons);
+                        }
+                    }
+                    this.service.update(order);
                 }
-                this.service.update(order);
+            } catch (Exception e) {
+                log.error(String.format("待支付订单处理异常,SN: %s", order.getOrderSn()), e);
             }
         }
     }
@@ -80,6 +86,6 @@ public class OrderExpired implements Job {
         LocalDateTime currentTime = LocalDateTime.now();
         Instant instant = date.toInstant();
         LocalDateTime time = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        return Duration.between(currentTime, time).getSeconds();
+        return Duration.between(time, currentTime).getSeconds();
     }
 }

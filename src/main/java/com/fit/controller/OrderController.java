@@ -28,6 +28,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -37,6 +38,9 @@ import java.util.regex.Pattern;
 @Controller
 public class OrderController extends BaseController {
 
+    private Pattern pattern = Pattern.compile("\\[(.*?)\\]", Pattern.MULTILINE);
+    private final String ORDER_KEY = "unicorn_orders";
+
     @Autowired
     private GoodsService goodService;
     @Autowired
@@ -44,43 +48,58 @@ public class OrderController extends BaseController {
     @Autowired
     private ZOrderService zOrderService;
 
-    private Pattern pattern = Pattern.compile("\\[(.*?)\\]", Pattern.MULTILINE);
+    /**
+     * 订单搜索页面
+     *
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping("/order_search")
+    public String search(HttpServletRequest request, Model model) {
+        model.addAttribute("is_open_search_pwd", false);
+        return "/order_search";
+    }
 
     /**
-     * 下单支付页面
+     * 订单详情页面
+     *
+     * @param request
+     * @param model
+     * @return
      */
-    @PostMapping("/bill")
-    public String bill(HttpServletRequest request, HttpServletResponse response, Model model) {
-        Cookie[] cookies = request.getCookies();
+    @GetMapping("/order_info")
+    public String info(HttpServletRequest request, Model model) {
         Map<String, Object> paramsMap = getRequestParamsMap(request);
-        String inCoupons = paramsMap.get("coupon").toString();
-        try {
-            Orders bean = BeanUtils.map2Bean(Orders.class, paramsMap);
-            bean.setBuyIp(HttpUtil.getRemoteIp(request));
-            zOrderService.creatOrder(bean, inCoupons);
-            // 设置cookie查询
-            for (Cookie cookie : cookies) {
-                if ("unicorn_orders".equals(cookie.getName())) {
-                    JSONArray array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
-                    array.add(bean.getOrderSn());
-                    response.addCookie(new Cookie("unicorn_orders", array.toJSONString()));
-                } else {
-                    JSONArray jsonArray = new JSONArray();
-                    jsonArray.add(bean.getOrderSn());
-                    response.addCookie(new Cookie("unicorn_orders", jsonArray.toJSONString()));
+        int page = ConverterUtils.toInt(paramsMap.get("page"), 1);
+        Cookie[] cookies = request.getCookies();
+        List<Orders> list = new ArrayList<>();
+        JSONArray array = null;
+        int count = 0;
+        for (Cookie cookie : cookies) {
+            if (ORDER_KEY.equals(cookie.getName())) {
+                array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
+            }
+        }
+        if (array != null) {
+            list = this.zOrderService.getCookieOrder(array);
+        } else {
+            if (paramsMap.containsKey("email") || paramsMap.containsKey("orderSn")) {
+                count = this.orderService.findCount(paramsMap);
+                paramsMap.put("offset", (page - 1) * 2);
+                paramsMap.put("limit", 2);
+                list = this.orderService.findList(paramsMap);
+                for (Orders order : list) {
+                    order.setInfo(getInfo(order.getInfo()));
                 }
             }
-            // 支付信息
-            Pays pays = this.zOrderService.getPayById(bean.getPayId());
-            model.addAttribute("order", bean);
-            model.addAttribute("coupon", bean.getCouponId() != null ? inCoupons : "");
-            model.addAttribute("payName", pays.getPayName());
-            model.addAttribute("info", pays);
-        } catch (Exception e) {
-            log.error("下单异常", e);
-            model.addAttribute("tips", "下单异常,请重新下单");
         }
-        return "bill";
+
+        model.addAttribute("count", count);
+        model.addAttribute("page", page);
+        model.addAttribute("orders", list);
+        model.addAttribute("pays", this.zOrderService.getPays());
+        return "/order_info";
     }
 
     private String getInfo(String info) {
@@ -96,6 +115,43 @@ public class OrderController extends BaseController {
             matcher.appendTail(result);
         }
         return result.toString();
+    }
+
+    /**
+     * 下单支付页面
+     */
+    @PostMapping("/bill")
+    public String bill(HttpServletRequest request, HttpServletResponse response, Model model) {
+        Cookie[] cookies = request.getCookies();
+        Map<String, Object> paramsMap = getRequestParamsMap(request);
+        String inCoupons = paramsMap.get("coupon").toString();
+        try {
+            Orders bean = BeanUtils.map2Bean(Orders.class, paramsMap);
+            bean.setBuyIp(HttpUtil.getRemoteIp(request));
+            zOrderService.creatOrder(bean, inCoupons);
+            // 设置cookie查询
+            for (Cookie cookie : cookies) {
+                if (ORDER_KEY.equals(cookie.getName())) {
+                    JSONArray array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
+                    array.add(bean.getOrderSn());
+                    response.addCookie(new Cookie(ORDER_KEY, array.toJSONString()));
+                } else {
+                    JSONArray jsonArray = new JSONArray();
+                    jsonArray.add(bean.getOrderSn());
+                    response.addCookie(new Cookie(ORDER_KEY, jsonArray.toJSONString()));
+                }
+            }
+            // 支付信息
+            Pays pays = this.zOrderService.getPayById(bean.getPayId());
+            model.addAttribute("order", bean);
+            model.addAttribute("coupon", bean.getCouponId() != null ? inCoupons : "");
+            model.addAttribute("payName", pays.getPayName());
+            model.addAttribute("info", pays);
+        } catch (Exception e) {
+            log.error("下单异常", e);
+            model.addAttribute("tips", "下单异常,请重新下单");
+        }
+        return "bill";
     }
 
     /**
@@ -117,40 +173,6 @@ public class OrderController extends BaseController {
         model.addAttribute("is_open_search_pwd", false);
         model.addAttribute("qrCode", false);
         return "/buy";
-    }
-
-    /**
-     * 订单搜索页面
-     *
-     * @param request
-     * @param model
-     * @return
-     */
-    @GetMapping("/order_search")
-    public String search(HttpServletRequest request, Model model) {
-        Map<String, Object> paramsMap = getRequestParamsMap(request);
-        model.addAttribute("is_open_search_pwd", false);
-        return "/order_search";
-    }
-
-    /**
-     * 订单详情页面
-     *
-     * @param request
-     * @param model
-     * @return
-     */
-    @PostMapping("/order_info")
-    public String info(HttpServletRequest request, Model model) {
-        Map<String, Object> paramsMap = getRequestParamsMap(request);
-        List<Orders> list = this.orderService.findList(paramsMap);
-        for (Orders order : list) {
-            order.setInfo(getInfo(order.getInfo()));
-        }
-        model.addAttribute("orders", list);
-        paramsMap.clear();
-        model.addAttribute("pays", this.zOrderService.getPays());
-        return "/order_info";
     }
 
     /**

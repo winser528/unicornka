@@ -7,8 +7,7 @@
         <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
             <div class="main-box">
                 <div class="pay-title">
-                    <img th:src="@{/static/images/order.png}" alt="order" />
-                    订单详情
+                    <img th:src="@{/static/images/order.png}" alt="order" />订单详情
                 </div>
                 <div th:if="${not #lists.isEmpty(orders)}" class="layui-card-body info-box" th:each="order: ${orders}">
                     <div class="layui-row order-list">
@@ -70,7 +69,7 @@
                         </div>
                     </div>
                 </div>
-
+                <div th:if="${not #lists.isEmpty(orders)}" style="display: flex;justify-content: center;align-items: center;" id="demo4"></div>
                 <div th:if="${#lists.isEmpty(orders)}" style="text-align: center">
                     <img th:src="@{/static/images/nofound.png}" alt="nofound" />
                     <div class="err_title">没有找到订单信息。</div>
@@ -83,15 +82,28 @@
 </div>
 <script type="text/javascript" th:src="@{/static/js/clipboard.min.js}"></script>
 <script>
-    layui.use('layer', function (layer) {
-        var clipboard = new ClipboardJS('.clipboard-but');
-        clipboard.on('success', function (e) {
-            layer.msg("复制成功");
+    layui.use(['laypage', 'layer'], function (laypage, layer) {
+        laypage.render({
+            elem: 'demo4'
+            ,count: [[${count}]]
+            ,curr: [[${page}]]
+            ,limit: 2
+            ,theme: '#3C8CE7'
+            ,jump:function (obj, first){
+                if (!first) {
+                    var params = new URLSearchParams(window.location.search);
+                    params.set("page", obj.curr);
+                    window.location.href = "/order_info?" + params.toString();
+                }
+            }
         });
-        clipboard.on('error', function (e) {
+        new ClipboardJS('.clipboard-but').on('success', function (e) {
+            layer.msg("复制成功");
+        }).on('error', function (e) {
             layer.msg("复制失败");
         });
     });
+
 </script>
 <!-- main end -->
 </th:block>

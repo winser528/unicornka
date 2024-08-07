@@ -98,8 +98,7 @@ public class SystemUtil {
      * 获取本机访问地址
      */
     public static String getIp() {
-        InetAddress addr = getLocalhost();
-        return ConverterUtils.toString(addr.getHostAddress());
+        return ConverterUtils.toString(getLocalhost().getHostAddress());
     }
 
     private static boolean isVM(String name) {

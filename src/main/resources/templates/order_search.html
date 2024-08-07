@@ -21,7 +21,7 @@
                         <div class="layui-tab-content" style="text-align: center">
                             <!-- 订单号查询 -->
                             <div class="layui-tab-item layui-show">
-                                <form class="layui-form" th:action="@{/order_info}" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="get">
                                     <div class="entry">
                                         <span class="l-msg">订单编号:</span>
                                         <label class="input">
@@ -35,7 +35,7 @@
                             </div>
                             <!-- 邮箱查询 -->
                             <div class="layui-tab-item">
-                                <form class="layui-form" th:action="@{/order_info}" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="get">
                                     <div class="entry">
                                         <span class="l-msg">下单邮箱:</span>
                                         <label class="input">
@@ -56,7 +56,7 @@
 
                             <!-- 浏览器缓存 -->
                             <div class="layui-tab-item">
-                                <form class="layui-form" th:action="@{/order_info}" method="post">
+                                <form class="layui-form" th:action="@{/order_info}" method="get">
                                     <div class="btn">
                                         <button lay-submit lay-filter="searchOrderByBrowser">立即查询</button>
                                     </div>
