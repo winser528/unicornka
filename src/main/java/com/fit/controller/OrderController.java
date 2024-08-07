@@ -2,17 +2,13 @@ package com.fit.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.fit.base.BaseController;
-import com.fit.base.R;
-import com.fit.config.SnowFlake;
 import com.fit.config.qr.QrImageTool;
-import com.fit.entity.Coupons;
 import com.fit.entity.Goods;
 import com.fit.entity.Orders;
 import com.fit.entity.Pays;
 import com.fit.service.*;
 import com.fit.util.BeanUtils;
 import com.fit.util.ConverterUtils;
-import com.fit.util.DateUtils;
 import com.fit.util.FastJsonUtil;
 import com.pay.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +18,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +37,7 @@ public class OrderController extends BaseController {
 
     private Pattern pattern = Pattern.compile("\\[(.*?)\\]", Pattern.MULTILINE);
     private final String ORDER_KEY = "unicorn_orders";
+    private final String UTF_8 = "UTF-8";
 
     @Autowired
     private GoodsService goodService;
@@ -76,23 +74,31 @@ public class OrderController extends BaseController {
         List<Orders> list = new ArrayList<>();
         JSONArray array = null;
         int count = 0;
-        for (Cookie cookie : cookies) {
-            if (ORDER_KEY.equals(cookie.getName())) {
-                array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
-            }
-        }
-        if (array != null) {
-            list = this.zOrderService.getCookieOrder(array);
-        } else {
-            if (paramsMap.containsKey("email") || paramsMap.containsKey("orderSn")) {
-                count = this.orderService.findCount(paramsMap);
-                paramsMap.put("offset", (page - 1) * 2);
-                paramsMap.put("limit", 2);
-                list = this.orderService.findList(paramsMap);
-                for (Orders order : list) {
-                    order.setInfo(getInfo(order.getInfo()));
+        try {
+            for (Cookie cookie : cookies) {
+                if (ORDER_KEY.equals(cookie.getName())) {
+                    array = FastJsonUtil.jsonStrParseJsonArray(URLDecoder.decode(cookie.getValue(), UTF_8));
                 }
             }
+            if (array != null) {
+                FastJsonUtil.reverse(array);
+                count = array.size();
+                int i = (page - 1) * 2;
+                list = this.zOrderService.getCookieOrder(array.subList(i, i + 2 > count ? count : i + 2));
+            } else {
+                if (paramsMap.containsKey("email") || paramsMap.containsKey("orderSn")) {
+                    count = this.orderService.findCount(paramsMap);
+                    paramsMap.put("offset", (page - 1) * 2);
+                    paramsMap.put("limit", 2);
+                    list = this.orderService.findList(paramsMap);
+                    for (Orders order : list) {
+                        order.setInfo(getInfo(order.getInfo()));
+                    }
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.error("查询订单异常", e);
+            model.addAttribute("tips", "查询订单异常");
         }
 
         model.addAttribute("count", count);
@@ -124,21 +130,22 @@ public class OrderController extends BaseController {
     public String bill(HttpServletRequest request, HttpServletResponse response, Model model) {
         Cookie[] cookies = request.getCookies();
         Map<String, Object> paramsMap = getRequestParamsMap(request);
-        String inCoupons = paramsMap.get("coupon").toString();
         try {
+            String inCoupons = paramsMap.get("coupon").toString();
             Orders bean = BeanUtils.map2Bean(Orders.class, paramsMap);
             bean.setBuyIp(HttpUtil.getRemoteIp(request));
+//            bean.setInfo();
             zOrderService.creatOrder(bean, inCoupons);
             // 设置cookie查询
             for (Cookie cookie : cookies) {
                 if (ORDER_KEY.equals(cookie.getName())) {
-                    JSONArray array = FastJsonUtil.jsonStrParseJsonArray(cookie.getValue());
+                    JSONArray array = FastJsonUtil.jsonStrParseJsonArray(URLDecoder.decode(cookie.getValue(), UTF_8));
                     array.add(bean.getOrderSn());
-                    response.addCookie(new Cookie(ORDER_KEY, array.toJSONString()));
+                    response.addCookie(new Cookie(ORDER_KEY, URLEncoder.encode(array.toJSONString(), UTF_8)));
                 } else {
                     JSONArray jsonArray = new JSONArray();
                     jsonArray.add(bean.getOrderSn());
-                    response.addCookie(new Cookie(ORDER_KEY, jsonArray.toJSONString()));
+                    response.addCookie(new Cookie(ORDER_KEY, URLEncoder.encode(jsonArray.toJSONString(), UTF_8)));
                 }
             }
             // 支付信息
@@ -146,7 +153,7 @@ public class OrderController extends BaseController {
             model.addAttribute("order", bean);
             model.addAttribute("coupon", bean.getCouponId() != null ? inCoupons : "");
             model.addAttribute("payName", pays.getPayName());
-            model.addAttribute("info", pays);
+            model.addAttribute("info", bean.getInfo());
         } catch (Exception e) {
             log.error("下单异常", e);
             model.addAttribute("tips", "下单异常,请重新下单");
@@ -155,7 +162,7 @@ public class OrderController extends BaseController {
     }
 
     /**
-     * 购买页面
+     * 购买页面，展示商品信息
      *
      * @param request
      * @param model
@@ -176,6 +183,8 @@ public class OrderController extends BaseController {
     }
 
     /**
+     * 支付页面，生成支付二维码
+     *
      * @param request
      * @param model
      * @return

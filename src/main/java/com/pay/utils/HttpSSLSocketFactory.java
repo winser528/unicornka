@@ -1,18 +1,3 @@
-/**
- *
- * Licensed Property to China UnionPay Co., Ltd.
- * 
- * (C) Copyright of China UnionPay Co., Ltd. 2010
- *     All Rights Reserved.
- *
- * 
- * Modification History:
- * =============================================================================
- *   Author         Date          Description
- *   ------------ ---------- ---------------------------------------------------
- *   xshu       2014-05-28     SSLSocket 链接工具类(用于https)
- * =============================================================================
- */
 package com.pay.utils;
 
 import java.io.IOException;

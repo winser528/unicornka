@@ -2,8 +2,6 @@ package com.fit.controller;
 
 import com.fit.base.BaseController;
 import com.fit.entity.Goods;
-import com.fit.entity.GoodsGroup;
-import com.fit.service.GoodsGroupService;
 import com.fit.service.GoodsService;
 import com.fit.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;

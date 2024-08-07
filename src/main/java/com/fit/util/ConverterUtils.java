@@ -382,8 +382,7 @@ public class ConverterUtils {
      * @param list      参数集合
      */
     public static String join(String separator, List<?> list) {
-        Object[] objs = list.toArray();
-        return join(separator, objs);
+        return join(separator, list.toArray());
     }
 
     /**
@@ -393,14 +392,10 @@ public class ConverterUtils {
      * @param separator 分隔符
      */
     public static String join(String separator, Object[] array) {
-        if (array == null) {
-            return null;
-        } else if (array.length <= 0) {
+        if (array == null || array.length <= 0) {
             return EMPTY;
-        } else if (array.length == 1) {
-            return String.valueOf(array[0]);
         } else {
-            StringBuilder sb = new StringBuilder(array.length * 16);
+            StringBuilder sb = new StringBuilder();
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0) {
                     sb.append(separator);

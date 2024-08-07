@@ -1,6 +1,5 @@
 package com.fit.base;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**

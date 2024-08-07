@@ -1,17 +1,9 @@
 package com.pay.alipay.services;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.fit.entity.Orders;
 import com.fit.entity.Pays;
 import com.pay.alipay.config.AlipayConfig;
 import com.pay.utils.HttpUtil;
-import com.pay.utils.PropUtil;
 import com.pay.utils.SignUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -22,6 +14,12 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @TITLE AlipayService.java

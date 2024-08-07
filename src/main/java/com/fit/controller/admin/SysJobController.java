@@ -9,14 +9,12 @@ import com.fit.entity.SysJob;
 import com.fit.service.SysJobService;
 import com.fit.util.BeanUtils;
 import com.fit.util.DateUtils;
-import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 

@@ -1,9 +1,6 @@
 package com.fit.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.*;
 import com.alibaba.fastjson.serializer.JSONLibDataFormatSerializer;
 import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -192,4 +189,15 @@ public class FastJsonUtil {
         return null;
     }
 
+    /**
+     * 倒序排列
+     */
+    public static void reverse(JSONArray jsonArray) {
+        int size = jsonArray.size();
+        for (int i = 0; i < size / 2; i++) {
+            Object temp = jsonArray.get(i);
+            jsonArray.set(i, jsonArray.get(size - 1 - i));
+            jsonArray.set(size - 1 - i, temp);
+        }
+    }
 }

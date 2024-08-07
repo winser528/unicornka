@@ -8,6 +8,7 @@ import com.fit.util.FastJsonUtil;
 import com.pay.utils.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -192,8 +193,15 @@ public class ZOrderService {
         return this.payService.get(id);
     }
 
-    public List<Orders> getCookieOrder(JSONArray array) {
-        String sql = "SELECT * from orders where id IN (?)";
-        return this.jdbcTemplate.queryForList(sql, Orders.class, array.toString().replace("\\[|]", ""));
+    public List<Orders> getCookieOrder(List array) {
+        StringBuffer sb = new StringBuffer("SELECT * from orders where order_sn IN (");
+        for (int i = 0; i < array.size(); i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append("?");
+        }
+        sb.append(") order by CREATE_TIME desc");
+        return this.jdbcTemplate.query(sb.toString(), new BeanPropertyRowMapper<>(Orders.class), array.toArray());
     }
 }

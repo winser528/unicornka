@@ -42,8 +42,12 @@
                                     <span class="small-tips tips-green" th:text="${order.type==1?'自动发货':'人工处理'}" />
                                 </li>
                                 <li>
-                                    <strong>实际支付价格:</strong>
+                                    <strong>实际支付价:</strong>
                                     <span class="small-tips tips-green" th:text="'￥'+${order.actualPrice}" />
+                                </li>
+                                <li>
+                                    <strong>支付方式:</strong>
+                                    <span class="span-tips" th:text="${pays.get(order?.payId.toString())}"></span>
                                 </li>
                                 <li th:switch="${order.status}"><strong>订单状态:</strong>
                                     <span th:case="-1" class="small-tips tips-cyan">已过期</span>
@@ -54,9 +58,11 @@
                                     <span th:case="5" class="small-tips tips-black">失败</span>
                                     <span th:case="6" class="small-tips tips-black">异常</span>
                                 </li>
-                                <li>
-                                    <strong>支付方式:</strong>
-                                    <span class="span-tips" th:text="${pays.get(order?.payId.toString())}"></span>
+                                <li th:switch="${order.status}">
+                                    <strong></strong>
+                                    <a th:case="1" th:href="@{/qrpay/{orderId}(orderId=${order.id})}"
+                                       class="layui-btn layui-btn-danger layui-btn-radius layui-btn-xs">
+                                        去支付</a>
                                 </li>
                             </ul>
                         </div>
