@@ -4,8 +4,8 @@
 <body  >
     <div class="yadmin-body animated fadeIn">
         <div class="layui-card layui-form">
-            <input type="hidden" name="roleId" value="${roleId}" />
-            <input type="hidden" id="menus" name="menus" value="${menuIds}" />
+            <input type="hidden" name="roleId" th:value="${roleId}" />
+            <input type="hidden" id="menus" name="menus" th:value="${menuIds}" />
             <div class="layui-form-item">
                 <input class="layui-input" id="searchInput" value="" placeholder="输入查询节点内容...">
             </div>
@@ -30,7 +30,7 @@
         layui.use(['jquery', 'form', 'dtree'], function ($, form, dtree) {
             dtree.render({
                 elem: "#menuTree",
-                url: "${ctx}/admin/menu/tree",
+                url: "/admin/menu/tree",
                 method: "post",
                 selectInitVal: 2,
                 dataStyle: "layuiStyle",
@@ -61,5 +61,5 @@
             });
         });
     </script>
-</body>>
+</body>
 </html>

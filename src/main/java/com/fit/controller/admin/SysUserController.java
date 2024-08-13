@@ -148,7 +148,7 @@ public class SysUserController extends BaseController {
     @RequestMapping("/setRole")
     public String setRoleView(@RequestParam Long id, Model model) {
         SysUser sysUser = userService.get(id);
-        model.addAttribute("roleId", sysUser);
+        model.addAttribute("roleId", sysUser.getRoleId());
         model.addAttribute("userId", id);
         return "admin/sys/user/setRole";
     }

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="_include :: head('角色角色')"/>
+<head th:include="_include :: head('设置角色')"/>
 <body class="layui-layout">
     <div class="yadmin-body animated fadeIn">
         <div class="layui-form layui-form-pane">
-            <input type="hidden" name="id" value="${userId}" />
-            <div class="layui-form-item" if="${role.pid}==0 ? false : true">
+            <input type="hidden" id="userId" name="id" th:value="${userId}" />
+            <input type="hidden" id="roleId" name="roleId" th:value="${roleId}" />
+            <div class="layui-form-item">
                 <label for="roleTree" class="layui-form-label"><span class="yadmin-red">*</span>上级名称</label>
                 <div class="layui-input-block">
                     <ul id="roleTree" class="dtree" data-id="0" data-value="选择上级名称"></ul>
-                    <input type="hidden" name="roleId" value="${roleId}" id="roleId" />
                 </div>
             </div>
             <div class="layui-form-item">
@@ -54,5 +54,5 @@
             });
         });
     </script>
-</body>>
+</body>
 </html>
