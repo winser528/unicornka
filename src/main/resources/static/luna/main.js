@@ -37,9 +37,9 @@
         });
     });
     layui.use(['jquery', 'form'], function ($, form) {
-        let goods1 = $("#goods1").attr("date-text"), tpl = document.getElementById('goodsTpl').innerHTML, json_goods1;
+        let goods1 = $("#goods1").attr("date-text");
         if (typeof goods1 !== 'undefined' && goods1 !== '') {
-            let changeCate = function (key) {
+            let tpl = document.getElementById('goodsTpl').innerHTML, json_goods1, changeCate = function (key) {
                 json_goods1 = JSON.parse(goods1);
                 if (key !== 0) {
                     json_goods1 = json_goods1.filter(function (item) {

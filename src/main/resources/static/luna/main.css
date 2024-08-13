@@ -1,13 +1,11 @@
 .background{
-    /*position:fixed;*/
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -10;
-    background: #fff url(/static/images/background.png) no-repeat center;
+    background: #fff url(/static/images/background.png) no-repeat fixed;
     background-size: cover; /* 图片覆盖整个背景区域 */
-    transform: scale(1);
     transform-origin: 0 0;
 }
 
@@ -240,7 +238,6 @@ input[type="number"] {
     color: #fff;
 }
 
-
 .main .goods {
     margin-top: 10px;
     border-top: 1px solid #f7f7f7;
@@ -284,7 +281,6 @@ input[type="number"] {
     min-width: 80px;
     width: 80px;
     height: 80px;
-
 }
 
 .main .goods .picture img {
@@ -368,6 +364,7 @@ input[type="number"] {
     right: 20px;
     bottom: 20%;
     box-shadow: 0 5px 6px 0 rgba(73, 105, 230, .22);
+    z-index: 9999;
 }
 
 .query-m a {
@@ -389,7 +386,6 @@ input[type="number"] {
     font-weight: 700;
 }
 
-
 /*扫码下单*/
 .order-m {
     cursor: pointer;
@@ -399,8 +395,9 @@ input[type="number"] {
     background-image: linear-gradient(135deg, #3C8CE7 10%, #00EAFF 100%);
     border-radius: 50%;
     right: 100px;
-    top: 20%;
+    bottom: 20%;
     box-shadow: 0 5px 6px 0 rgba(73, 105, 230, .22);
+    z-index: 9999;
 }
 
 .order-m a {

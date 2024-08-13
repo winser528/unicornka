@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='购买商品')">
 <th:block th:fragment="contents">
-<!-- main start -->
 <div class="main">
     <div class="layui-row">
         <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
@@ -35,9 +34,9 @@
                             </div>
 
                             <div class="sale" th:if="${g.wholesalePriceCnf}">
-                                <span class="small-tips tips-pink" th:each="w: ${g.wholesalePriceCnf}">
-                                    [[ ${w.goodsDisc} ${w.number} ]]
-                                </span>
+                            <span class="small-tips tips-pink" th:each="w: ${g.wholesalePriceCnf}">
+                                [[ ${w.goodsDisc} ${w.number} ]]
+                            </span>
                             </div>
                             <div class="entry notSelection">
                                 <span class="l-msg">购买数量：</span>
@@ -98,9 +97,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="main">
     <div class="layui-row">
         <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
             <div class="main-box">
@@ -114,7 +110,6 @@
         </div>
     </div>
 </div>
-
 <div class="query-m">
     <a href="{{ url('order-search') }}">
         <img style="margin: 5px 15px;" th:src="@{/static/images/orders.png}" alt="orders" />

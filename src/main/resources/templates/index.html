@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="_layout(title='首页')">
 <th:block th:fragment="contents">
-    <div class="main">
-        <div class="layui-row">
-            <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
-                <div class="main-box">
-                    <div class="title">
-                        <img th:src="@{/static/images/classify.png}" alt="classify"/>
-                        <span>选择分类</span>
+<div class="main">
+    <div class="layui-row">
+        <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
+            <div class="main-box">
+                <div class="title">
+                    <img th:src="@{/static/images/classify.png}" alt="classify"/>
+                    <span>选择分类</span>
+                </div>
+                <div class="cate">
+                    <div class="cate-box" th:each="g : ${groups1}" th:data-key="${g.id}" th:classappend="${gStat.first}? 'cate-box-select'">
+                        <p th:text="${g.gpName}"></p>
+                        <div>商品数量：[[${g.size}]]</div>
                     </div>
-                    <div class="cate">
-                        <div class="cate-box" th:each="g : ${groups1}" th:data-key="${g.id}" th:classappend="${gStat.first}? 'cate-box-select'">
-                            <p th:text="${g.gpName}"></p>
-                            <div>商品数量：[[${g.size}]]</div>
-                        </div>
-                    </div>
-                    <div class="goods">
-                        <p class="title-2">
-                            <img th:src="@{/static/images/choose.png}" alt="choose"/>
-                            <span>选择商品</span>
-                        </p>
-                        <div class="goods-list" id="goods1" th:date-text="${goods1}"></div>
-                        <script id="goodsTpl" type="text/html">
-                        {{# layui.each(d, function(index, item){ }}
-                        <a href="{{ item.inStock > 0 ? '/buy/' + item.id : 'javascript:void(0);' }}" class="goods-box"
-                           style="{{ item.inStock <= 0 ? 'cursor:not-allowed;' : '' }}">
-                                {{# if(item.picture) { }}
-                                <div class="picture"><img src="{{ item.picture }}" alt=""></div>
-                                {{# } }}
-                                <div class="msg">
-                                    <div class="goods-name">{{ item.gdName }}</div>
-                                    <div class="goods-price">
-                                        ￥{{ item.actualPrice }}
-                                        {{# layui.each(item.wholesalePriceCnf, function(i, w){ }}
-                                        <div>{{ w.goodsDisc }} {{ i + 1 }}</div>
-                                        {{# }); }}
-                                    </div>
-                                    <div class="goods-num">
-                                        <div><p style="width:{{ (item.inStock / (item.inStock + item.salesVolume)) * 100 }}%"></p></div>
-                                        <span>剩余{{ item.inStock }}件</span>
-                                    </div>
+                </div>
+                <div class="goods">
+                    <p class="title-2">
+                        <img th:src="@{/static/images/choose.png}" alt="choose"/>
+                        <span>选择商品</span>
+                    </p>
+                    <div class="goods-list" id="goods1" th:date-text="${goods1}"></div>
+                    <script id="goodsTpl" type="text/html">
+                    {{# layui.each(d, function(index, item){ }}
+                    <a href="{{ item.inStock > 0 ? '/buy/' + item.id : 'javascript:void(0);' }}" class="goods-box"
+                       style="{{ item.inStock <= 0 ? 'cursor:not-allowed;' : '' }}">
+                            {{# if(item.picture) { }}
+                            <div class="picture"><img src="{{ item.picture }}" alt=""></div>
+                            {{# } }}
+                            <div class="msg">
+                                <div class="goods-name">{{ item.gdName }}</div>
+                                <div class="goods-price">
+                                    ￥{{ item.actualPrice }}
+                                    {{# layui.each(item.wholesalePriceCnf, function(i, w){ }}
+                                    <div>{{ w.goodsDisc }} {{ i + 1 }}</div>
+                                    {{# }); }}
                                 </div>
-                            </a>
-                        {{# }); }}
-                        </script>
-                    </div>
+                                <div class="goods-num">
+                                    <div><p style="width:{{ (item.inStock / (item.inStock + item.salesVolume)) * 100 }}%"></p></div>
+                                    <span>剩余{{ item.inStock }}件</span>
+                                </div>
+                            </div>
+                        </a>
+                    {{# }); }}
+                    </script>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </th:block>
 <!-- main end -->
 </html>
