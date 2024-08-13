@@ -101,11 +101,12 @@
     });
 
     //方法定义
-    let msgArea = w.clientWidth <= 768 ? ['85%'] : ['50%'];
-    w.showQrcode = function (imgUrl) {
-        let html = '<div class="qr" style="">' +
-            '<svg t="1602929622714" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7733" data-spm-anchor-id="a313x.7781069.0.i25" width="400" height="400"><path d="M985.3 307.5c-21.4 0-38.7-17.3-38.7-38.7V156.9c0-43.8-35.6-79.4-79.4-79.4H765.7c-21.4 0-38.7-17.3-38.7-38.7S744.3 0 765.7 0h101.4C953.6 0 1024 70.4 1024 156.9v111.9c0 21.4-17.3 38.7-38.7 38.7zM258.3 1024H156.9C70.4 1024 0 953.6 0 867.1V766.5c0-21.4 17.3-38.7 38.7-38.7s38.7 17.3 38.7 38.7v100.6c0 43.8 35.6 79.4 79.4 79.4h101.4c21.4 0 38.7 17.3 38.7 38.7s-17.2 38.8-38.6 38.8zM38.7 296.2C17.3 296.2 0 278.9 0 257.5V156.9C0 70.4 70.4 0 156.9 0h101.4C279.7 0 297 17.3 297 38.7s-17.3 38.7-38.7 38.7H156.9c-43.8 0-79.4 35.6-79.4 79.4v100.6c-0.1 21.5-17.4 38.8-38.8 38.8zM867.1 1024H766.5c-21.4 0-38.7-17.3-38.7-38.7s17.3-38.7 38.7-38.7h100.6c43.8 0 79.4-35.6 79.4-79.4V765.7c0-21.4 17.3-38.7 38.7-38.7s38.7 17.3 38.7 38.7v101.4c0.1 86.5-70.3 156.9-156.8 156.9z" p-id="7734" data-spm-anchor-id="a313x.7781069.0.i26" class="selected" fill="#515151"></path><path d="M779.9 550.7H244.1c-21.4 0-38.7-17.3-38.7-38.7s17.3-38.7 38.7-38.7h535.7c21.4 0 38.7 17.3 38.7 38.7s-17.2 38.7-38.6 38.7z" p-id="7735" data-spm-anchor-id="a313x.7781069.0.i27" class="selected" fill="#515151"></path></svg>' +
-            '<img src="' + imgUrl + '" alt=""></div>';
+    w.showQrcode = function (element) {
+        let html = `
+        <div class="qr">
+            <svg width="400" height="400"><image xlink:href="${element.dataset.img}" class="selected" /></svg>
+            <img src="${element.dataset.qrCode}"/>
+        </div>`;
         w.tipsMsg(qrSvg, '扫描二维码,手机下单', html);
     }
     w.tipsMsg = function (inSvg, title, content) {
@@ -113,7 +114,7 @@
             type: 1,
             title: inSvg ? inSvg : tipsSvg + title,
             closeBtn: 2,
-            area: msgArea,
+            area: w.clientWidth <= 768 ? '85%' : '50%',
             skin: 'home-tips',
             anim: 5,
             shade: 0.7,

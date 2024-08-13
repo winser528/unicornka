@@ -123,7 +123,7 @@
 </div>
 
 <div class="order-m">
-    <div th:onclick="window.showQrcode('data:image/png;base64,${qrCode}')">
+    <div th:data-qr-code="${qrCode}" th:data-img="@{/static/images/selected.png}" onclick="window.showQrcode(this)">
         <img th:src="@{/static/images/qrscan.png}" alt="qrscan" style="margin: 6px 0 0 18px;" />
         <span>手机下单</span>
     </div>

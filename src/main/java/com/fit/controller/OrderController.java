@@ -178,7 +178,8 @@ public class OrderController extends BaseController {
         model.addAttribute("pays", this.zOrderService.getListPays());
         model.addAttribute("is_open_geetest", false);
         model.addAttribute("is_open_search_pwd", false);
-        model.addAttribute("qrCode", false);
+        String qrCode = String.format("data:image/png;base64,%s", QrImageTool.base64QrImage(request.getRequestURL().toString()));
+        model.addAttribute("qrCode", qrCode);
         return "/buy";
     }
 
@@ -197,7 +198,7 @@ public class OrderController extends BaseController {
         model.addAttribute("payName", pay.getPayName());
         model.addAttribute("payTime", 5);
         model.addAttribute("actualPrice", orders.getActualPrice());
-        model.addAttribute("qrCode", QrImageTool.base64QrImage("orders.getActualPrice()"));
+        model.addAttribute("qrCode", QrImageTool.base64QrImage(orders.getActualPrice().toString()));
 
         return "/qrpay";
     }

@@ -5,9 +5,8 @@
     width: 100%;
     height: 100%;
     z-index: -10;
-    background-color: #fff;
-    background: url(/static/images/background.png) no-repeat;
-    background-repeat: no-repeat;
+    background: #fff url(/static/images/background.png) no-repeat center;
+    background-size: cover; /* 图片覆盖整个背景区域 */
     transform: scale(1);
     transform-origin: 0 0;
 }
@@ -400,7 +399,7 @@ input[type="number"] {
     background-image: linear-gradient(135deg, #3C8CE7 10%, #00EAFF 100%);
     border-radius: 50%;
     right: 100px;
-    bottom: 20%;
+    top: 20%;
     box-shadow: 0 5px 6px 0 rgba(73, 105, 230, .22);
 }
 
@@ -523,7 +522,7 @@ input[type="number"] {
 }
 
 .qr img {
-    height: 300px;
+    height: 320px;
     position: absolute;
     top: 50%;
     left: 50%;
