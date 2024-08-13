@@ -59,16 +59,16 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="buyPrompt" class="layui-form-label"><span class="yadmin-red">*</span>购买提示</label>
+            <label for="buyPrompt" class="layui-form-label">购买提示</label>
             <div class="layui-input-block">
-                <input type="text" id="buyPrompt" name="buyPrompt" th:value="${bean?.buyPrompt}" lay-verify="required" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                <input type="text" id="buyPrompt" name="buyPrompt" th:value="${bean?.buyPrompt}" autocomplete="off" class="layui-input" />
             </div>
         </div>
         <div class="layui-form-item" pane="">
             <label class="layui-form-label">商品类型</label>
             <div class="layui-input-block">
-                <input type="radio" id="radioType" name="type" value="1" title="自动发货" />
-                <input type="radio" name="type" value="2" title="人工处理" checked />
+                <input type="radio" id="radioType" name="type" value="true" title="自动发货" />
+                <input type="radio" name="type" value="false" title="人工处理" checked />
             </div>
         </div>
         <div class="layui-form-item" pane="">
@@ -105,6 +105,10 @@
                     errors(event);
                 }
             });
+
+            $('input:radio[name=type][value="[[${bean?.type}]]"]').prop("checked", true);
+            $('input:radio[name=isOpen][value="[[${bean?.isOpen}]]"]').prop("checked", true);
+            form.render('radio');
 
             form.on('submit(submit-form)', function (obj) {
                 modifyReq('/admin/goods/save', obj.field, true);

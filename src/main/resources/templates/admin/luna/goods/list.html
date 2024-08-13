@@ -72,7 +72,7 @@
             // 工具条点击事件
             table.on('toolbar', function (obj) {
                 if (obj.event === 'add') {
-                    editView("/admin/goods/edit", "新增优惠");
+                    editView("/admin/goods/edit", "新增商品");
                 } else if (obj.event === 'del') {
                     changeDel('/admin/goods/del', 'table-goods');
                 }
@@ -81,7 +81,7 @@
             table.on('tool', function (obj) {
                 let data = obj.data, event = obj.event;
                 if (event === 'edit') {
-                    editView("/admin/goods/edit?id=" + data.id, "编辑优惠");
+                    editView("/admin/goods/edit?id=" + data.id, "编辑商品");
                 }
             });
 

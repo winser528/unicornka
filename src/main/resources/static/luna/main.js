@@ -37,6 +37,26 @@
         });
     });
     layui.use(['jquery', 'form'], function ($, form) {
+        let goods1 = $("#goods1").attr("date-text"), tpl = document.getElementById('goodsTpl').innerHTML, json_goods1;
+        if (typeof goods1 !== 'undefined' && goods1 !== '') {
+            let changeCate = function (key) {
+                json_goods1 = JSON.parse(goods1);
+                if (key !== 0) {
+                    json_goods1 = json_goods1.filter(function (item) {
+                        return item.groupId === key;
+                    });
+                }
+                layui.laytpl(tpl).render(json_goods1, function (html) {
+                    $('.goods-list').html(html);
+                });
+            };
+            $('.cate').on('click', '.cate-box', function () {
+                let d = $(this), key = d.data('key');
+                changeCate(key);
+                $('.cate-box').removeClass('cate-box-select').filter('[data-key="' + key + '"]').addClass('cate-box-select');
+            });
+            changeCate(0);
+        }
         //页面操作
         $('.pay-type').each(function () {
             let t = $(this), type = t.data('type'), name = t.data('name');

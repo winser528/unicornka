@@ -4,6 +4,7 @@ import com.fit.base.BaseController;
 import com.fit.entity.Goods;
 import com.fit.service.GoodsService;
 import com.fit.service.IndexService;
+import com.fit.util.FastJsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,7 @@ public class IndexController extends BaseController {
         List<Map<String, Object>> groups1 = index.getGroups();
         mv.addObject("groups1", groups1);
         List<Goods> goods1 = goods.findList(map);
-        mv.addObject("goods1", goods1);
+        mv.addObject("goods1", FastJsonUtil.toJSONString(goods1));
         return mv;
     }
 

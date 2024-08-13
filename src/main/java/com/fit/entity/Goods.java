@@ -60,7 +60,7 @@ public class Goods extends BaseEntity<Goods> {
     /** 商品描述 (无默认值) */
     private String description;
 
-    /** 商品类型  1自动发货 2人工处理  (默认值为: 1) */
+    /** 商品类型  0人工处理 1自动发货  (默认值为: 1) */
     private Boolean type;
 
     /** 批发价配置 (无默认值) */

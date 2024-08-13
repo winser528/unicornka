@@ -83,7 +83,7 @@ function modifyReq(url, dataParam, isReload) {
             if (data.code === 0) {
                 layui.layer.msg(data.msg, {icon: 6, time: 2000}, function () {
                     if (isReload) {
-                        layui.table.reload(isReload);
+                        parent.layui.table.reload(parent.document.querySelector('table').id);
                     }
                     parent.layer.close(parent.layer.getFrameIndex(window.name));
                 });
