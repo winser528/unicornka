@@ -10,7 +10,7 @@
                 <label for="menuTree" class="layui-form-label"><span class="yadmin-red">*</span>上级名称</label>
                 <div class="layui-input-block">
                     <ul id="menuTree" class="dtree" data-id="0" data-value="选择上级名称"></ul>
-                    <input type="hidden" id="pid" name="pid" th:value="${pid}">
+                    <input type="hidden" id="pid" name="pid" th:value="${menu?.pid}">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -24,21 +24,21 @@
                 <div class="layui-input-block">
                     <select id="mold" name="mold" class="layui-input" lay-verify="required" lay-vertype="tips">
                         <option>请选择</option>
-                        <option value="1" <c:if test="${menu.mold eq 1}">selected</c:if> >目录</option>
-                        <option value="2" <c:if test="${menu.mold eq 2}">selected</c:if> >按钮</option>
+                        <option value="1" th:selected="${menu.mold eq 1}">目录</option>
+                        <option value="2" th:selected="${menu.mold eq 2}">按钮</option>
                     </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label for="url" class="layui-form-label">访问地址</label>
-                <div class="layui-input-block">
-                    <input type="text" id="url" placeholder="请输入访问地址" name="url" th:value="${menu?.url}" lay-vertype="tips" class="layui-input" />
                 </div>
             </div>
             <div class="layui-form-item">
                 <label for="icon" class="layui-form-label">图标</label>
                 <div class="layui-input-block">
                     <input type="text" id="icon" placeholder="请选择图标" name="icon" th:value="${menu?.icon}" lay-vertype="tips" autocomplete="off" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="url" class="layui-form-label">访问地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="url" placeholder="请输入访问地址" name="url" th:value="${menu?.url}" lay-vertype="tips" class="layui-input" />
                 </div>
             </div>
             <div class="layui-form-item">
