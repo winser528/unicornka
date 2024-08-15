@@ -104,14 +104,13 @@
                     <img th:src="@{/static/images/details.png}" alt="details" />
                     <span>商品描述</span>
                 </div>
-                <div class="intro" th:text="${g.description}">商品描述
-                </div>
+                <div class="intro" th:text="${g.description}">商品描述</div>
             </div>
         </div>
     </div>
 </div>
 <div class="query-m">
-    <a href="{{ url('order-search') }}">
+    <a href="/order_search">
         <img style="margin: 5px 15px;" th:src="@{/static/images/orders.png}" alt="orders" />
         <span>查单</span>
     </a>

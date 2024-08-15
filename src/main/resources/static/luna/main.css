@@ -1,4 +1,4 @@
-.background{
+.background {
     top: 0;
     left: 0;
     width: 100%;
@@ -7,6 +7,12 @@
     background: #fff url(/static/images/background.png) no-repeat fixed;
     background-size: cover; /* 图片覆盖整个背景区域 */
     transform-origin: 0 0;
+}
+
+.clipboard-but {
+    width: 100%;
+    margin-top: initial;
+    margin-bottom: 10px
 }
 
 input::-webkit-outer-spin-button,
@@ -736,7 +742,7 @@ input[type="number"] {
 
 .err_title {
     color: #545454;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     margin-top: 20px;
 }
@@ -744,7 +750,11 @@ input[type="number"] {
 .err_content {
     margin-top: 30px;
     margin-bottom: 30px;
+    margin-left: 10%;
     color: #737373;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
 }
 
 .err_but {
@@ -795,7 +805,7 @@ input[type="number"] {
     padding-top: 10px;
 }
 
-.pay-qr.isMobile{
+.pay-qr.isMobile {
     padding-bottom: 20px;
 }
 
@@ -836,6 +846,7 @@ input[type="number"] {
     body {
         background: initial;
     }
+
     .header {
         background-image: linear-gradient(135deg, #3C8CE7 10%, #00EAFF 100%);
         color: #fff;

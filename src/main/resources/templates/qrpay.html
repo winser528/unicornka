@@ -6,11 +6,7 @@
         <div class="layui-row">
             <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
                 <div class="main-box">
-                    <div class="pay-title">
-                        <img th:src="@{/static/images/qrcode.png}" alt="qrcode" />
-                        扫码支付
-                    </div>
-
+                    <div class="pay-title"><img th:src="@{/static/images/qrcode.png}" alt="qrcode" />扫码支付</div>
                     <div class="layui-card-body">
                         <div class="product-info">
                             <p class="pay-info">支付方式：[[${payName}]], 请打开 APP 扫码支付！有效期: [[${payTime}]] 分钟</p>
@@ -18,9 +14,7 @@
                         <div class="pay-qr" th:classappend="${isMobile?'isMobile':''}">
                             <p class="product-pay-price" style="font-size: 16px;color: #737373;"> 需要支付金额: ￥[[${actualPrice}]]</p>
                             <img th:src="'data:image/png;base64,'+${qrCode}" alt="支付码"/>
-                            <p th:if="${isMobile}" class="btn" style="margin-bottom: 20px">
-                                <a href="/">打开 APP 支付</a>
-                            </p>
+                            <p th:if="${isMobile}" class="btn" style="margin-bottom: 20px"><a href="/">打开 APP 支付</a></p>
                         </div>
                     </div>
                 </div>

@@ -6,9 +6,7 @@
     <div class="layui-row">
         <div class="layui-col-md8 layui-col-md-offset2 layui-col-sm12">
             <div class="main-box">
-                <div class="pay-title">
-                    <img th:src="@{/static/images/order.png}" alt="order" />订单详情
-                </div>
+                <div class="pay-title"><img th:src="@{/static/images/order.png}" alt="order" />订单详情</div>
                 <div th:if="${not #lists.isEmpty(orders)}" class="layui-card-body info-box" th:each="order: ${orders}">
                     <div class="layui-row order-list">
                         <div class="layui-col-md4">
@@ -39,11 +37,11 @@
                             <ul class="info-ui">
                                 <li>
                                     <strong>订单类型:</strong>
-                                    <span class="small-tips tips-green" th:text="${order.type==1?'自动发货':'人工处理'}" />
+                                    <span class="small-tips tips-green" th:text="${order.type==1?'自动发货':'人工处理'}"></span>
                                 </li>
                                 <li>
                                     <strong>实际支付价:</strong>
-                                    <span class="small-tips tips-green" th:text="'￥'+${order.actualPrice}" />
+                                    <span class="small-tips tips-green" th:text="'￥'+${order.actualPrice}"></span>
                                 </li>
                                 <li>
                                     <strong>支付方式:</strong>
@@ -61,16 +59,14 @@
                                 <li th:switch="${order.status}">
                                     <strong></strong>
                                     <a th:case="1" th:href="@{/qrpay/{orderId}(orderId=${order.id})}"
-                                       class="layui-btn layui-btn-danger layui-btn-radius layui-btn-xs">
-                                        去支付</a>
+                                       class="layui-btn layui-btn-danger layui-btn-radius layui-btn-xs">去支付</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="layui-col-md4">
                             <textarea readonly spellcheck="false" th:id="'bar'+${order.id}" class="order-info" th:text="${order?.info}"></textarea>
                             <div class="btn" style="width: 100%">
-                                <button class="clipboard-but" type="button" th:data-clipboard-target="'#bar'+${order.id}"
-                                        style="width: 100%;margin-top: initial;margin-bottom: 10px">复制</button>
+                                <button class="clipboard-but" type="button" th:data-clipboard-target="'#bar'+${order.id}">复制</button>
                             </div>
                         </div>
                     </div>
@@ -79,7 +75,7 @@
                 <div th:if="${#lists.isEmpty(orders)}" style="text-align: center">
                     <img th:src="@{/static/images/nofound.png}" alt="nofound" />
                     <div class="err_title">没有找到订单信息。</div>
-                    <div class="err_content">或许可以检查核对下输入的订单号，邮箱，或者查询密码是否正确哦！！</div>
+                    <div class="err_content">请可以检查核对下输入的订单号、邮箱或者查询密码是否正确哦!</div>
                     <div class="btn"><a href="javascript:history.back(-1);"><span>返回</span></a></div>
                 </div>
             </div>
@@ -88,28 +84,27 @@
 </div>
 <script type="text/javascript" th:src="@{/static/js/clipboard.min.js}"></script>
 <script>
-    layui.use(['laypage', 'layer'], function (laypage, layer) {
-        laypage.render({
-            elem: 'demo4'
-            ,count: [[${count}]]
-            ,curr: [[${page}]]
-            ,limit: 2
-            ,theme: '#3C8CE7'
-            ,jump:function (obj, first){
-                if (!first) {
-                    var params = new URLSearchParams(window.location.search);
-                    params.set("page", obj.curr);
-                    window.location.href = "/order_info?" + params.toString();
-                }
+layui.use(['laypage', 'layer'], function (laypage, layer) {
+    laypage.render({
+        elem: 'demo4'
+        ,count: [[${count}]]
+        ,curr: [[${page}]]
+        ,limit: 2
+        ,theme: '#3C8CE7'
+        ,jump:function (obj, first){
+            if (!first) {
+                var params = new URLSearchParams(window.location.search);
+                params.set("page", obj.curr);
+                window.location.href = "/order_info?" + params.toString();
             }
-        });
-        new ClipboardJS('.clipboard-but').on('success', function (e) {
-            layer.msg("复制成功");
-        }).on('error', function (e) {
-            layer.msg("复制失败");
-        });
+        }
     });
-
+    new ClipboardJS('.clipboard-but').on('success', function (e) {
+        layer.msg("复制成功");
+    }).on('error', function (e) {
+        layer.msg("复制失败");
+    });
+});
 </script>
 <!-- main end -->
 </th:block>
