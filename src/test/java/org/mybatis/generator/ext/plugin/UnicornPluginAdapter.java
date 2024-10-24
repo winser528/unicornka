@@ -7,18 +7,13 @@ import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
-import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.internal.JDBCConnectionFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 /**
  * @AUTO 自定义代码生成器
@@ -27,7 +22,8 @@ import java.util.*;
  */
 public class UnicornPluginAdapter extends PluginAdapter {
 
-    public static SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+    private final static String patternTime = "yyyy-MM-dd HH:mm:ss";
+    public static SimpleDateFormat df = new SimpleDateFormat(patternTime);
     private String targetBusine = "";
 
     public static void main(String[] args) {
@@ -43,20 +39,19 @@ public class UnicornPluginAdapter extends PluginAdapter {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         String tableComment = getTableComment(table);
         String domainObjectName = introspectedTable.getFullyQualifiedTable().getDomainObjectName();// 获取bean
-        String destPackage = domainObjectName + "Service";
         String clazzType = introspectedTable.getBaseRecordType();// 获取bean路径
-        String clazzName = clazzType.substring(clazzType.lastIndexOf(".") + 1);
+        String[] clazzParts = clazzType.split("\\.");
+        String beanPathName = clazzParts[2];
+        String clazzName = clazzParts[3];
         String daoInterfaceType = introspectedTable.getDAOInterfaceType().replace("DAO", "Dao");//获取DAO路径
         String daoName = daoInterfaceType.substring(daoInterfaceType.lastIndexOf(".") + 1);
-        targetBusine = clazzType.substring(0, clazzType.lastIndexOf("."))
-                .replace("entity", "service")
-                .replace("bean", "service");
+        targetBusine = clazzType.substring(0, clazzType.lastIndexOf(".")).replace(beanPathName, "service");
         FullyQualifiedJavaType superClassType = new FullyQualifiedJavaType("BaseCrudService<" + daoName + "," + clazzName + ">");
         FullyQualifiedJavaType impClassType = new FullyQualifiedJavaType("com.fit.base.BaseCrudService");
         FullyQualifiedJavaType impServiceType = new FullyQualifiedJavaType("org.springframework.stereotype.Service");
         FullyQualifiedJavaType beanType = new FullyQualifiedJavaType(clazzType);
         FullyQualifiedJavaType daoType = new FullyQualifiedJavaType(daoInterfaceType);
-        TopLevelClass dto = new TopLevelClass(destPackage);
+        TopLevelClass dto = new TopLevelClass(domainObjectName + "Service");
         dto.addFileCommentLine("package " + targetBusine + ";\n");
         dto.addImportedType(impServiceType);
         dto.setSuperClass(superClassType);
@@ -65,50 +60,8 @@ public class UnicornPluginAdapter extends PluginAdapter {
         dto.addImportedType(daoType);
         dto.setVisibility(JavaVisibility.PUBLIC);
         dto.addAnnotation("@Service");
-        dto.addJavaDocLine("/**\n" +
-                " * @AUTO " + tableComment + "服务实现类\n" +
-                " * @Author AIM\n" +
-                " * @DATE " + df.format(new Date()) +
-                "\n */");
+        dto.addJavaDocLine(insDocLine(tableComment + "服务实现类"));
         return dto;
-    }
-
-    /**
-     * 获取表说明备注
-     */
-    private String getTableComment(FullyQualifiedTable table) {
-        String tableComment = "";
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rs = null;
-        try {
-            JDBCConnectionFactory jdbc = new JDBCConnectionFactory(context.getJdbcConnectionConfiguration());
-            connection = jdbc.getConnection();
-            statement = connection.createStatement();
-            rs = statement.executeQuery("SHOW CREATE TABLE " + table.getIntrospectedTableName());
-
-            if (rs != null && rs.next()) {
-                String createDDL = rs.getString(2);
-                int index = createDDL.indexOf("COMMENT='");
-                if (index > 0) {
-                    tableComment = createDDL.substring(index + 9);
-                    tableComment = tableComment.substring(0, tableComment.length() - 1);
-                }
-            }
-        } catch (SQLException e) {
-        } finally {
-            try {
-                if (null != rs)
-                    rs.close();
-                if (statement != null)
-                    statement.close();
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return tableComment;
     }
 
     /**
@@ -138,6 +91,7 @@ public class UnicornPluginAdapter extends PluginAdapter {
      */
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType("BaseCrudDao<" + introspectedTable.getBaseRecordType() + ">");
         FullyQualifiedJavaType imp = new FullyQualifiedJavaType("com.fit.base.BaseCrudDao");
         FullyQualifiedJavaType mapimp = new FullyQualifiedJavaType("org.apache.ibatis.annotations.Mapper");
@@ -145,37 +99,9 @@ public class UnicornPluginAdapter extends PluginAdapter {
         interfaze.addImportedType(imp);// 添加import common.BaseDao;
         interfaze.addImportedType(mapimp);// 添加import common.BaseDao;
         interfaze.addAnnotation("@Mapper");
-        interfaze.addJavaDocLine("/**\n" +
-                " * @AUTO\n" +
-                " * @Author AIM\n" +
-                " * @DATE " + df.format(new Date()) +
-                "\n */");
+        interfaze.addJavaDocLine(insDocLine(getTableComment(table) + "接口"));
         interfaze.getMethods().clear();
         return true;
-    }
-
-    /**
-     * 生成实体中每个属性
-     */
-    @Override
-    public boolean modelGetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        return true;
-    }
-
-    /**
-     * 制定序列化
-     */
-    protected void makeSerializable(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        Field field = new Field();
-        field.setFinal(true);
-        field.setInitializationString("1L");
-        field.setName("serialVersionUID");
-        field.setStatic(true);
-        field.setType(new FullyQualifiedJavaType("long"));
-        field.setVisibility(JavaVisibility.PRIVATE);
-
-        List<Field> fields = topLevelClass.getFields();
-        fields.add(0, field);
     }
 
     /**
@@ -183,6 +109,8 @@ public class UnicornPluginAdapter extends PluginAdapter {
      */
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
+        String tableComment = getTableComment(table); // 表备注
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType("BaseEntity<" + introspectedTable.getBaseRecordType() + ">");
         topLevelClass.setSuperClass(fqjt);
         FullyQualifiedJavaType imp = new FullyQualifiedJavaType("com.fit.base.BaseEntity");
@@ -190,11 +118,7 @@ public class UnicornPluginAdapter extends PluginAdapter {
         FullyQualifiedJavaType impDate = new FullyQualifiedJavaType("java.util.Date");
         topLevelClass.addImportedType(impDate);
         makeSerializable(topLevelClass, introspectedTable);
-        topLevelClass.addJavaDocLine("/**\n" +
-                " * @AUTO\n" +
-                " * @Author AIM\n" +
-                " * @DATE " + df.format(new Date()) +
-                "\n */");
+        topLevelClass.addJavaDocLine(insDocLine(tableComment));
         return true;
     }
 
@@ -253,7 +177,7 @@ public class UnicornPluginAdapter extends PluginAdapter {
             sb.setLength(0);
             sb.append(" and ");
             sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
-            sb.append(" = "); //$NON-NLS-1$
+            sb.append(" = ");
             sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
             isNotNullElement.addElement(new TextElement(sb.toString()));
         }
@@ -318,13 +242,14 @@ public class UnicornPluginAdapter extends PluginAdapter {
         return super.sqlMapDocumentGenerated(document, introspectedTable);
     }
 
-    //生成mapping 添加自定义方法(四) 条件批量伤处
+    //生成mapping 添加自定义方法(四) 条件批量删除
     public boolean methodXMLGenerated_four(Document document, IntrospectedTable introspectedTable) {
+        String introspectedKeyColumn = introspectedTable.getPrimaryKeyColumns().get(0).getActualColumnName();
         XmlElement parentElement = document.getRootElement();
         XmlElement select = new XmlElement("delete");
         select.addAttribute(new Attribute("id", "batchDelete"));
         select.addElement(new TextElement("delete from " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        select.addElement(new TextElement(" where id in ("));
+        select.addElement(new TextElement(" where " + introspectedKeyColumn + " in ("));
         select.addElement(new TextElement(" <foreach collection=\"array\" item=\"id\" separator=\",\">"));
         select.addElement(new TextElement(" #{id}"));
         select.addElement(new TextElement(" </foreach>"));
@@ -332,6 +257,67 @@ public class UnicornPluginAdapter extends PluginAdapter {
 
         parentElement.addElement(select);
         return super.sqlMapDocumentGenerated(document, introspectedTable);
+    }
+
+    private String insDocLine(String auto) {
+        return "/**\n" +
+                " * @AUTO " + auto + "\n" +
+                " * @Author AIM\n" +
+                " * @DATE " + df.format(new Date()) +
+                "\n */";
+    }
+
+    /**
+     * 获取表说明备注
+     */
+    private String getTableComment(FullyQualifiedTable table) {
+        String tableComment = "";
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            JDBCConnectionFactory jdbc = new JDBCConnectionFactory(context.getJdbcConnectionConfiguration());
+            connection = jdbc.getConnection();
+            statement = connection.createStatement();
+            rs = statement.executeQuery("SHOW CREATE TABLE " + table.getIntrospectedTableName());
+
+            if (rs != null && rs.next()) {
+                String createDDL = rs.getString(2);
+                int index = createDDL.indexOf("COMMENT='");
+                if (index > 0) {
+                    tableComment = createDDL.substring(index + 9);
+                    tableComment = tableComment.substring(0, tableComment.length() - 1);
+                }
+            }
+        } catch (SQLException e) {
+        } finally {
+            try {
+                if (null != rs)
+                    rs.close();
+                if (statement != null)
+                    statement.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return tableComment;
+    }
+
+    /**
+     * 制定序列化
+     */
+    private void makeSerializable(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        Field field = new Field();
+        field.setFinal(true);
+        field.setInitializationString("1L");
+        field.setName("serialVersionUID");
+        field.setStatic(true);
+        field.setType(new FullyQualifiedJavaType("long"));
+        field.setVisibility(JavaVisibility.PRIVATE);
+        List<Field> fields = topLevelClass.getFields();
+        fields.add(0, field);
     }
 
     @Override
