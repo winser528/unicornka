@@ -6,8 +6,6 @@ import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,10 +97,5 @@ public class RenameJavaMapperPlugin extends PluginAdapter {
         } else {
             return true;
         }
-    }
-
-    private String date2Str(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        return sdf.format(date);
     }
 }
