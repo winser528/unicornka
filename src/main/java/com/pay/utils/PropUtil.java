@@ -1,15 +1,9 @@
 package com.pay.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.Properties;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @TITLE PropUtil.java
@@ -26,13 +20,13 @@ public class PropUtil {
 	 */
 	static {
 		try {
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("alipay.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("paycard.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("paypal.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("tenpay.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("unionpay.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("wachat.properties"));
-			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("yspay.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/alipay.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/paycard.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/paypal.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/tenpay.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/unionpay.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/wachat.properties"));
+			properties.load(PropUtil.class.getClassLoader().getResourceAsStream("pay/yspay.properties"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

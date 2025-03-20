@@ -19,7 +19,7 @@ public class LogProUtils {
 	/** 配置文件 */
 	private static Properties p = new Properties();
 	/** 读取的配置文件名 */
-	private static final String propertiesFileName = "paylog.properties";
+	private static final String propertiesFileName = "pay/paylog.properties";
 	/** 路径配置方式 on:绝对路径，off:相对路径,默认绝对路径 （相对路径是相对于应用服务运行时的WEB-INF/classes目录） */
 	private static final String absoluPathOFF = "off";
 	/** 绝对路径开关 */
