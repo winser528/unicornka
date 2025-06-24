@@ -18,7 +18,6 @@ import java.util.*;
  * @AUTO 数据类型转换工具类
  * @DATE 2018-11-5 下午4:28:33
  * @Author Fit
- * @Company 天际友盟
  */
 public class ConverterUtils {
 

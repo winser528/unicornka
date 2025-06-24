@@ -16,11 +16,9 @@ public class UnicornApplication {
         ConfigurableApplicationContext run = SpringApplication.run(UnicornApplication.class, args);
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = emptyToDefault(System.getenv("POST"), run.getEnvironment().getProperty("server.port"));
-
-        log.info("\n---------------------------------------------------------\n" +
-                "Application Admin is running! Access URLs:\n\t" +
-                String.format("Local: \t\thttp://localhost:%s/\n\tExternal:\t%s://%s:%s/", port, "http", ip, port) +
-                "\n-----------------页面请部署 admin-web----------------------");
+        log.info("---------------------------------------------------------");
+        log.info("\nApplication Admin is running! Access URLs:\n\tLocal: \t\thttp://localhost:{}\n\tExternal:\t%s://{}:{}", port, "http", ip, port);
+        log.info("-----------------已启动部署 admin-web----------------------");
     }
 
     private static String emptyToDefault(String str, String defaultStr) {
