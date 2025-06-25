@@ -17,7 +17,7 @@ public class UnicornApplication {
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = emptyToDefault(System.getenv("POST"), run.getEnvironment().getProperty("server.port"));
         log.info("---------------------------------------------------------");
-        log.info("\nApplication Admin is running! Access URLs:\n\tLocal: \t\thttp://localhost:{}\n\tExternal:\t%s://{}:{}", port, "http", ip, port);
+        log.info("\nApplication Admin is running! Access URLs:\n\tLocal: \t\thttp://localhost:{}\n\tExternal:\t{}://{}:{}", port, "http", ip, port);
         log.info("-----------------已启动部署 admin-web----------------------");
     }
 
